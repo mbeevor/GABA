@@ -71,7 +71,7 @@ public class RecipeListFragment extends Fragment {
                 Recipe recipePosition = recipeList.get(position);
                 Recipe recipe = new Recipe(recipePosition.getRecipeId(),
                         recipePosition.getRecipeName());
-                Intent detailFragmentIntent = new Intent(getContext(), DetailFragment.class)
+                Intent detailFragmentIntent = new Intent(getContext(), DetailActivity.class)
                         .putExtra("recipe", recipe);
                 startActivity(detailFragmentIntent);
             }
