@@ -24,8 +24,9 @@ class QueryUtils {
         }
 
         JSONArray recipeListArray = new JSONArray(recipeJson);
-        ArrayList<Recipe> recipesList = new ArrayList<Recipe>();
+        ArrayList<Recipe> recipesList = new ArrayList<>();
 
+        try {
 
         for (int i = 0; 1 < recipeJson.length(); i++) {
 
@@ -36,13 +37,15 @@ class QueryUtils {
 
             Recipe recipe = new Recipe(recipeId, recipeName);
             recipesList.add(recipe);
-
         }
+
+        } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
         return recipesList;
 
     }
-
 
 
 }

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -53,14 +54,16 @@ public class RecipeListFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_recipe_list, container, false);
 
-        recyclerView = rootView.findViewById(R.id.recylcerview_main_activity);
+        recyclerView = rootView.findViewById(R.id.recipe_list_recylerview);
 
         // create Linear LayoutManager
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
         // set recyclerView to have a fixed size so that all items in the list are the same size.
         recyclerView.setHasFixedSize(true);
+
+        recipeList = new ArrayList<>();
 
         recipeListAdapter = new RecipeListAdapter(getContext(), new RecipeListAdapter.OnItemClickHandler() {
             @Override
@@ -83,7 +86,7 @@ public class RecipeListFragment extends Fragment {
 
     private void loadRecipeList() {
 
-        URL getRecipeListUrl = NetworkUtils.queryUrl();
+        URL getRecipeListUrl = NetworkUtils.recipeUrl();
         new GetRecipeListDataTask(new GetRecipeDataListener())
                 .execute(getRecipeListUrl);
 
@@ -98,9 +101,7 @@ public class RecipeListFragment extends Fragment {
             recipeList = list;
 
             if (recipeList != null){
-
-                recyclerView.setAdapter(recipeListAdapter);
-
+                recipeListAdapter.updateRecipeData(recipeList);
             }
 
         }

@@ -12,6 +12,12 @@ public class MainActivity extends AppCompatActivity implements RecipeListFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        RecipeListFragment recipeListFragment = new RecipeListFragment();
+//        fragmentManager.beginTransaction()
+//                .add(R.id.fragment_container, recipeListFragment)
+//                .commit();
+
     }
 
     @Override

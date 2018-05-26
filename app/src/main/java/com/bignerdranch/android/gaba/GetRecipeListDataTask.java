@@ -18,9 +18,14 @@ class GetRecipeListDataTask extends AsyncTask<URL, Void, List<Recipe>> {
     private AsyncTaskListener delegate = null;
 
 
-    public GetRecipeListDataTask(AsyncTaskListener aysncTaskListener) {
+    public GetRecipeListDataTask(AsyncTaskListener asyncTaskListener) {
 
-        delegate = aysncTaskListener;
+        delegate = asyncTaskListener;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
     }
 
     @Override
@@ -29,17 +34,19 @@ class GetRecipeListDataTask extends AsyncTask<URL, Void, List<Recipe>> {
 
             if (urls != null) {
 
-                URL queryUrl = urls[0];
-                String httpQuery = NetworkUtils.getResponseFromHttpUrl(queryUrl);
-
+                URL recipeUrl = urls[0];
+                String httpQuery;
+                httpQuery = NetworkUtils.getResponseFromHttpUrl(recipeUrl);
                 if (httpQuery != null) {
-                    recipeList = QueryUtils.getSimpleRecipeQueryStringFromJson(httpQuery);
+                    try {
+                        recipeList = QueryUtils.getSimpleRecipeQueryStringFromJson(httpQuery);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     return recipeList;
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
             e.printStackTrace();
         }
         return recipeList;
@@ -47,9 +54,10 @@ class GetRecipeListDataTask extends AsyncTask<URL, Void, List<Recipe>> {
 
     @Override
     protected void onPostExecute(List<Recipe> recipes) {
-        recipeList = recipes;
 
-        if (recipeList != null) {
+        recipes = recipeList;
+
+        if (recipes != null) {
             delegate.onTaskComplete(recipeList);
         }
 
