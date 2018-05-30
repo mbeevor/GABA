@@ -1,10 +1,11 @@
 package com.bignerdranch.android.gaba;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,8 +48,8 @@ public class RecipeListFragment extends Fragment {
 
         recyclerView = rootView.findViewById(R.id.recipe_list_recylerview);
 
-        // create Linear LayoutManager
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        // create Grid LayoutManager
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), setGridColumns());
         recyclerView.setLayoutManager(layoutManager);
 
         // set recyclerView to have a fixed size so that all items in the list are the same size.
@@ -99,5 +100,25 @@ public class RecipeListFragment extends Fragment {
             }
 
         }
+    }
+
+    // method to calculate size of Grid based on device configuration
+    public int setGridColumns() {
+
+        int gridColumns = 0;
+
+        switch (getResources().getConfiguration().orientation) {
+
+            case Configuration.ORIENTATION_PORTRAIT:
+                gridColumns = 1;
+                break;
+
+            case Configuration.ORIENTATION_LANDSCAPE:
+                gridColumns = 2;
+                break;
+        }
+
+        return gridColumns;
+
     }
 }

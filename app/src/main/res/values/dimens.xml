@@ -3,5 +3,6 @@
 
     <dimen name="heading_padding">12dp</dimen>
     <dimen name="padding">8dp</dimen>
+    <dimen name="margin">4dp</dimen>
 
 </resources>

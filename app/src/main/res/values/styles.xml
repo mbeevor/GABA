@@ -17,6 +17,7 @@
     <style name="list_item" >
         <item name="android:textSize">28sp</item>
         <item name="android:padding">@dimen/padding</item>
+        <item name="android:layout_margin">@dimen/margin</item>
         <item name="android:textColor">@color/colorPrimaryText</item>
     </style>
 
