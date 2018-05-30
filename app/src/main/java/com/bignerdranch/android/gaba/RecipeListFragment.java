@@ -1,7 +1,6 @@
 package com.bignerdranch.android.gaba;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,18 +19,11 @@ public class RecipeListFragment extends Fragment {
     RecyclerView recyclerView;
     public List<Recipe> recipeList;
     private RecipeListAdapter recipeListAdapter;
-
+    RecipeListAdapter.OnRecipeClickListener onRecipeClickListener;
 
     // empty constructor
     public RecipeListFragment() {
 
-    }
-
-    // define recipe click listener and interface
-    OnRecipeClickListener onRecipeClickListener;
-
-    public interface OnRecipeClickListener {
-        void onRecipeSelected(int position);
     }
 
     @Override
@@ -40,7 +31,7 @@ public class RecipeListFragment extends Fragment {
         super.onAttach(context);
 
         try {
-            onRecipeClickListener = (OnRecipeClickListener) context;
+            onRecipeClickListener = (RecipeListAdapter.OnRecipeClickListener)context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement onRecipeClickListener");
@@ -63,18 +54,21 @@ public class RecipeListFragment extends Fragment {
         // set recyclerView to have a fixed size so that all items in the list are the same size.
         recyclerView.setHasFixedSize(true);
 
-        recipeList = new ArrayList<>();
-
-        recipeListAdapter = new RecipeListAdapter(getContext(), new RecipeListAdapter.OnItemClickHandler() {
+        recipeListAdapter = new RecipeListAdapter(getContext(), new RecipeListAdapter.OnRecipeClickListener() {
             @Override
-            public void onItemClick(View item, int position) {
-                Recipe recipePosition = recipeList.get(position);
-                Recipe recipe = new Recipe(recipePosition.getRecipeId(),
-                        recipePosition.getRecipeName());
-                Intent detailFragmentIntent = new Intent(getContext(), DetailActivity.class)
-                        .putExtra("recipe", recipe);
-                startActivity(detailFragmentIntent);
+            public void onRecipeSelected(List<Recipe> recipes, int position) {
+                onRecipeClickListener.onRecipeSelected(recipeList, position);
             }
+
+//            @Override
+//            public void onItemClick(View item, int position) {
+//                Recipe recipePosition = recipeList.get(position);
+//                Recipe recipe = new Recipe(recipePosition.getRecipeId(),
+//                        recipePosition.getRecipeName());
+//                Intent detailFragmentIntent = new Intent(getContext(), DetailActivity.class)
+//                        .putExtra("recipe", recipe);
+//                startActivity(detailFragmentIntent);
+//            }
         });
 
         recyclerView.setAdapter(recipeListAdapter);

@@ -4,10 +4,11 @@
              android:layout_height="match_parent"
              tools:context="com.bignerdranch.android.gaba.DetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/recipe_name_heading_tv"
+        style="@style/recipe_heading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"/>
+        tools:text="@string/recipe_name_placeholder"/>
 
 </FrameLayout>

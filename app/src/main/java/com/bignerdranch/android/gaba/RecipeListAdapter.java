@@ -18,18 +18,20 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     private List<Recipe> recipeList;
     private Context context;
-    private OnItemClickHandler onItemClickHandler;
+    private OnRecipeClickListener onRecipeClickListener;
 
-    public interface OnItemClickHandler {
-        void onItemClick(View item, int position);
+    public interface OnRecipeClickListener {
+        void onRecipeSelected(List<Recipe> recipes, int position);
     }
 
     //default constructor
-    public RecipeListAdapter(Context thisContext, OnItemClickHandler handler) {
+    public RecipeListAdapter(Context thisContext, OnRecipeClickListener listener) {
         context = thisContext;
-        onItemClickHandler = handler;
+        onRecipeClickListener = listener;
         setHasStableIds(true);
     }
+
+
 
     @Override
     public long getItemId(int position) {
@@ -97,7 +99,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
             if (recipeList != null) {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    onItemClickHandler.onItemClick(view, position);
+                    onRecipeClickListener.onRecipeSelected(recipeList, position);
                 }
             }
 

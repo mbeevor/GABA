@@ -1,27 +1,34 @@
 package com.bignerdranch.android.gaba;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements RecipeListFragment.OnRecipeClickListener {
 
+public class MainActivity extends AppCompatActivity implements RecipeListAdapter.OnRecipeClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        RecipeListFragment recipeListFragment = new RecipeListFragment();
-//        fragmentManager.beginTransaction()
-//                .add(R.id.fragment_container, recipeListFragment)
-//                .commit();
+        setTitle(R.string.long_app_name);
 
     }
 
-    @Override
-    public void onRecipeSelected(int position) {
+    @Overrid
+    public void onRecipeSelected(List<Recipe> recipes, int position) {
 
-    }
+
+                Recipe recipe = new Recipe(recipes.get(position).getRecipeId(),
+                        recipes.get(position).getRecipeName());
+
+                Intent intent = new Intent(this, DetailActivity.class);
+                intent.putExtra("recipe", recipe);
+                startActivity(intent);
+
+
+        }
+
 }

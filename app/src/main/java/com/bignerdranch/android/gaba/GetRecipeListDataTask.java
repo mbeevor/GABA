@@ -55,10 +55,8 @@ class GetRecipeListDataTask extends AsyncTask<URL, Void, List<Recipe>> {
     @Override
     protected void onPostExecute(List<Recipe> recipes) {
 
-        recipes = recipeList;
-
         if (recipes != null) {
-            delegate.onTaskComplete(recipeList);
+            delegate.onTaskComplete(recipes);
         }
 
     }
