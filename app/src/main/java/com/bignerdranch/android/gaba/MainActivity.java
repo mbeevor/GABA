@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
 
     }
 
-    @Overrid
+    @Override
     public void onRecipeSelected(List<Recipe> recipes, int position) {
 
 
