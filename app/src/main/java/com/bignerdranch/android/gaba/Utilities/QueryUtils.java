@@ -48,13 +48,12 @@ public class QueryUtils {
 
             JSONArray recipeListArray = new JSONArray(recipeJson);
 
-            for (int i = 0; 1 < recipeJson.length(); i++) {
+            for (int i = 0; 1 < recipeListArray.length(); i++) {
 
             JSONObject recipeObject = recipeListArray.getJSONObject(i);
 
             String recipeId = recipeObject.getString(ID);
             String recipeName = recipeObject.getString(NAME);
-
 
             JSONArray ingredientsArray = recipeObject.getJSONArray(INGREDIENTS_LIST);
 
@@ -110,6 +109,8 @@ public class QueryUtils {
         return recipesList;
 
     }
+
+
 
 
 }

@@ -18,7 +18,7 @@ public class Recipe implements Parcelable {
     private String numberServings;
     private String recipeImage;
 
-    public Recipe(String id, String name, ArrayList ingredients, ArrayList steps, String servings, String image) {
+    public Recipe(String id, String name, ArrayList<Ingredients> ingredients, ArrayList<Steps> steps, String servings, String image) {
 
         recipeId = id;
         recipeName = name;
@@ -32,8 +32,8 @@ public class Recipe implements Parcelable {
 
         recipeId = parcel.readString();
         recipeName = parcel.readString();
-        parcel.readList(this.ingredientsList, Ingredients.class.getClassLoader());
-        parcel.readList(this.stepsList, Steps.class.getClassLoader());
+        parcel.readList(ingredientsList, Ingredients.class.getClassLoader());
+        parcel.readList(stepsList, Steps.class.getClassLoader());
         numberServings = parcel.readString();
         recipeImage = parcel.readString();
 
@@ -48,9 +48,9 @@ public class Recipe implements Parcelable {
         return recipeName;
     }
 
-    public ArrayList getIngredientsList() { return ingredientsList;}
+    public ArrayList<Ingredients> getIngredientsList() { return ingredientsList;}
 
-    public ArrayList getStepsList() { return stepsList;}
+    public ArrayList<Steps> getStepsList() { return stepsList;}
 
     public String getNumberServings() {return numberServings;}
 
