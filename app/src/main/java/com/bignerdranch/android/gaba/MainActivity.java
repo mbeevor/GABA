@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.bignerdranch.android.gaba.Adapters.RecipeListAdapter;
+import com.bignerdranch.android.gaba.Model.Recipe;
+
 import java.util.List;
 
 
@@ -20,15 +23,20 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
     @Override
     public void onRecipeSelected(List<Recipe> recipes, int position) {
 
+        Recipe recipeSelected = recipes.get(position);
+        Recipe recipe = new Recipe(recipeSelected.getRecipeId(),
+                recipeSelected.getRecipeName(),
+                recipeSelected.getIngredientsList(),
+                recipeSelected.getStepsList(),
+                recipeSelected.getNumberServings(),
+                recipeSelected.getRecipeImage()
+                );
 
-                Recipe recipe = new Recipe(recipes.get(position).getRecipeId(),
-                        recipes.get(position).getRecipeName());
-
-                Intent intent = new Intent(this, DetailActivity.class);
-                intent.putExtra("recipe", recipe);
-                startActivity(intent);
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("recipe", recipe);
+        startActivity(intent);
 
 
-        }
+    }
 
 }

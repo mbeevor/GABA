@@ -5,4 +5,8 @@
     <dimen name="padding">8dp</dimen>
     <dimen name="margin">4dp</dimen>
 
+    <dimen name="tablet_menu_width">200dp</dimen>
+    <dimen name="media_height">360dp</dimen>
+
+
 </resources>

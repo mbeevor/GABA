@@ -1,4 +1,6 @@
-package com.bignerdranch.android.gaba;
+package com.bignerdranch.android.gaba.Adapters;
+
+import com.bignerdranch.android.gaba.Model.Recipe;
 
 import java.util.List;
 

@@ -11,16 +11,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bignerdranch.android.gaba.Adapters.AsyncTaskListener;
+import com.bignerdranch.android.gaba.Adapters.GetRecipeListDataTask;
+import com.bignerdranch.android.gaba.Adapters.RecipeListAdapter;
+import com.bignerdranch.android.gaba.Model.Recipe;
+import com.bignerdranch.android.gaba.Utilities.NetworkUtils;
+
 import java.net.URL;
 import java.util.List;
 
 
 public class RecipeListFragment extends Fragment {
 
-    RecyclerView recyclerView;
+    public RecyclerView recyclerView;
     public List<Recipe> recipeList;
-    private RecipeListAdapter recipeListAdapter;
-    RecipeListAdapter.OnRecipeClickListener onRecipeClickListener;
+    public RecipeListAdapter recipeListAdapter;
+    public RecipeListAdapter.OnRecipeClickListener onRecipeClickListener;
 
     // empty constructor
     public RecipeListFragment() {
@@ -61,15 +67,6 @@ public class RecipeListFragment extends Fragment {
                 onRecipeClickListener.onRecipeSelected(recipeList, position);
             }
 
-//            @Override
-//            public void onItemClick(View item, int position) {
-//                Recipe recipePosition = recipeList.get(position);
-//                Recipe recipe = new Recipe(recipePosition.getRecipeId(),
-//                        recipePosition.getRecipeName());
-//                Intent detailFragmentIntent = new Intent(getContext(), DetailActivity.class)
-//                        .putExtra("recipe", recipe);
-//                startActivity(detailFragmentIntent);
-//            }
         });
 
         recyclerView.setAdapter(recipeListAdapter);
@@ -88,7 +85,7 @@ public class RecipeListFragment extends Fragment {
     }
 
 
-    private class GetRecipeDataListener implements AsyncTaskListener {
+    public class GetRecipeDataListener implements AsyncTaskListener {
 
         @Override
         public void onTaskComplete(List<Recipe> list) {
@@ -103,7 +100,7 @@ public class RecipeListFragment extends Fragment {
     }
 
     // method to calculate size of Grid based on device configuration
-    public int setGridColumns() {
+    private int setGridColumns() {
 
         int gridColumns = 0;
 

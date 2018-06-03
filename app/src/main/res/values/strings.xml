@@ -5,4 +5,7 @@
     <!-- place holder text -->
     <string name="recipe_name_placeholder">Recipe Name</string>
 
+    <string name="previous">Back</string>
+    <string name="next">Next step</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.bignerdranch.android.gaba;
+package com.bignerdranch.android.gaba.Utilities;
 
 import android.net.Uri;
 
