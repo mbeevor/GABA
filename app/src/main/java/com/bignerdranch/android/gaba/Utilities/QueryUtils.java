@@ -35,20 +35,19 @@ public class QueryUtils {
 
     public static ArrayList<Recipe> getSimpleRecipeQueryStringFromJson(String recipeJson) {
 
+       if (TextUtils.isEmpty(recipeJson)) {
+            return null;
+        }
+
         ArrayList<Recipe> recipesList = new ArrayList<>();
         ArrayList<Ingredients> ingredientsList = new ArrayList<>();
         ArrayList<Steps> stepsList = new ArrayList<>();
-
-
-        if (TextUtils.isEmpty(recipeJson)) {
-            return null;
-        }
 
         try {
 
             JSONArray recipeListArray = new JSONArray(recipeJson);
 
-            for (int i = 0; 1 < recipeListArray.length(); i++) {
+            for (int i = 0; 1 <recipeListArray.length(); i++) {
 
             JSONObject recipeObject = recipeListArray.getJSONObject(i);
 
@@ -57,7 +56,7 @@ public class QueryUtils {
 
             JSONArray ingredientsArray = recipeObject.getJSONArray(INGREDIENTS_LIST);
 
-            for (int j = 0; 1 <ingredientsArray.length(); j++) {
+            for (int j = 0; j <ingredientsArray.length(); j++) {
 
                 JSONObject currentRecipe = ingredientsArray.getJSONObject(j);
 
@@ -73,7 +72,7 @@ public class QueryUtils {
 
             JSONArray stepsArray = recipeObject.getJSONArray(STEPS);
 
-            for (int k = 0; 1 <ingredientsArray.length(); k++) {
+            for (int k = 0; k <stepsArray.length(); k++) {
 
                 JSONObject currentRecipe = stepsArray.getJSONObject(k);
 
