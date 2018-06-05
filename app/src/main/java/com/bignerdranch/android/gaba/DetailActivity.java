@@ -24,22 +24,23 @@ public class DetailActivity extends AppCompatActivity {
     private boolean twoPane;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        if (savedInstanceState != null) {
-            Intent intent = getIntent();
-            recipe = intent.getParcelableExtra("recipe");
-            Toast.makeText(this, "Recipe selected is " + recipeName, Toast.LENGTH_SHORT).show();
-        }
+        Intent intent = getIntent();
 
-        if (recipe != null) {
-            recipeName = recipe.getRecipeName();
-            Log.v("Recipe name ==", recipeName);
+            recipeName = intent.getStringExtra("recipeName");
+            Toast.makeText(this, "Recipe selected is " + recipeName, Toast.LENGTH_SHORT).show();
             setTitle(recipeName);
-        } else
-            setTitle(R.string.long_app_name);
+
+
+//
+//        if (recipe != null) {
+//            recipeName = recipe.getRecipeName();
+//            Log.v("Recipe name ==", recipeName);
+//            setTitle(recipeName);
+//        } else
 
         if (findViewById(R.id.instruction_linear_layout) != null) {
 

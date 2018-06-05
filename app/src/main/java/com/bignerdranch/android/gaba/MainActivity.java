@@ -3,6 +3,7 @@ package com.bignerdranch.android.gaba;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.bignerdranch.android.gaba.Adapters.RecipeListAdapter;
 import com.bignerdranch.android.gaba.Model.Recipe;
@@ -32,9 +33,10 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
                 recipeSelected.getRecipeImage()
                 );
 
-            Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra("recipe", recipe);
-            startActivity(intent);
+        final Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra("recipeName", recipe.getRecipeName());
+
+        this.startActivity(intent);
 
 
 

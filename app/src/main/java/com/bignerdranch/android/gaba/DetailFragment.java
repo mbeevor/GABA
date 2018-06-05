@@ -18,15 +18,15 @@ public class DetailFragment extends Fragment {
         // Required empty public constructor
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        if (savedInstanceState != null) {
+            // do something here
+        }
 
             View rootView = inflater.inflate(R.layout.fragment_detail_list, container, false);
-
             final TextView textView = rootView.findViewById(R.id.recipe_name_heading_tv);
 
             return rootView;
