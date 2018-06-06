@@ -4,6 +4,8 @@
 
     <!-- place holder text -->
     <string name="recipe_name_placeholder">Recipe Name</string>
+    <string name="detail_list_placeholder">Recipe Step</string>
+    <string name="ingredients_list">Ingredients you\'ll need</string>
 
     <string name="previous">Back</string>
     <string name="next">Next step</string>

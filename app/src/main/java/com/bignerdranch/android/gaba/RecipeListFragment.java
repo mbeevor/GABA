@@ -50,7 +50,7 @@ public class RecipeListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        final View rootView = inflater.inflate(R.layout.fragment_recipe_list, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_activity_main, container, false);
 
         recyclerView = rootView.findViewById(R.id.recipe_list_recylerview);
 

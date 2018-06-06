@@ -3,7 +3,6 @@ package com.bignerdranch.android.gaba;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.bignerdranch.android.gaba.Adapters.RecipeListAdapter;
 import com.bignerdranch.android.gaba.Model.Recipe;
@@ -25,19 +24,20 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
     public void onRecipeSelected(List<Recipe> recipes, int position) {
 
         Recipe recipeSelected = recipes.get(position);
-        Recipe recipe = new Recipe(recipeSelected.getRecipeId(),
-                recipeSelected.getRecipeName(),
-                recipeSelected.getIngredientsList(),
-                recipeSelected.getStepsList(),
-                recipeSelected.getNumberServings(),
-                recipeSelected.getRecipeImage()
-                );
+
+        Bundle recipe = new Bundle();
+        recipe.putString("recipeId", recipeSelected.getRecipeId());
+        recipe.putString("recipeName", recipeSelected.getRecipeName());
+        recipe.putParcelableArrayList("ingredientsList", recipeSelected.getIngredientsList());
+        recipe.putParcelableArrayList("stepsList", recipeSelected.getStepsList());
+        recipe.putString("numberServings", recipeSelected.getNumberServings());
+        recipe.putString("recipeImage", recipeSelected.getRecipeImage());
+
 
         final Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra("recipeName", recipe.getRecipeName());
+        intent.putExtras(recipe);
 
         this.startActivity(intent);
-
 
 
     }

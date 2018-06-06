@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/GABA.iml" filepath="$PROJECT_DIR$/GABA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/GABA.iml" filepath="$PROJECT_DIR$/.idea/GABA.iml" />
       <module fileurl="file://C:\Users\mbeev\StudioProjects\GABA\GABA.iml" filepath="C:\Users\mbeev\StudioProjects\GABA\GABA.iml" />
+      <module fileurl="file://C:\Users\Matthew\AndroidStudioProjects\GABA\GABA.iml" filepath="C:\Users\Matthew\AndroidStudioProjects\GABA\GABA.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://C:\Users\mbeev\StudioProjects\GABA\app\app.iml" filepath="C:\Users\mbeev\StudioProjects\GABA\app\app.iml" />
+      <module fileurl="file://C:\Users\Matthew\AndroidStudioProjects\GABA\app\app.iml" filepath="C:\Users\Matthew\AndroidStudioProjects\GABA\app\app.iml" />
     </modules>
   </component>
 </project>
