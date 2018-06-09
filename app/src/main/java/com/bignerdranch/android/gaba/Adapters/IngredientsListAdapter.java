@@ -24,8 +24,8 @@ public class IngredientsListAdapter extends RecyclerView.Adapter<IngredientsList
     private Context context;
 
     //default constructor
-    public IngredientsListAdapter(ArrayList<Ingredients> ingredients) {
-        ingredientsList = ingredients;
+    public IngredientsListAdapter(Context thisContext) {
+        context = thisContext;
         setHasStableIds(true);
     }
 
@@ -33,7 +33,7 @@ public class IngredientsListAdapter extends RecyclerView.Adapter<IngredientsList
     public IngredientsListAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         int layoutForIngredients = R.layout.list_item_ingredient;
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
 
         View view = layoutInflater.inflate(layoutForIngredients, parent, false);
         IngredientsListAdapterViewHolder viewHolder = new IngredientsListAdapterViewHolder(view);
@@ -43,23 +43,18 @@ public class IngredientsListAdapter extends RecyclerView.Adapter<IngredientsList
     @Override
     public void onBindViewHolder(IngredientsListAdapterViewHolder holder, int position) {
 
-        if (ingredientsList != null) {
 
-            Ingredients ingredients = ingredientsList.get(position);
-            String itemQuantity = ingredients.getItemQuantity();
-            String itemMeasure = ingredients.getItemMeasure();
-            String itemIngredient = ingredients.getItemIngredient();
+        Ingredients ingredients = ingredientsList.get(position);
+        String itemQuantity = ingredients.getItemQuantity();
+        String itemMeasure = ingredients.getItemMeasure();
+        String itemIngredient = ingredients.getItemIngredient();
 
-            IngredientsListAdapterViewHolder viewHolder = holder;
+        IngredientsListAdapterViewHolder viewHolder = holder;
 
-            if (viewHolder.ingredientTextView != null) {
-                viewHolder.quantityTextView.setText(itemQuantity);
-                viewHolder.measureTextView.setText(itemMeasure);
-                viewHolder.ingredientTextView.setText(itemIngredient);
-            }
+        viewHolder.quantityTextView.setText(itemQuantity);
+        viewHolder.measureTextView.setText(itemMeasure);
+        viewHolder.ingredientTextView.setText(itemIngredient);
 
-
-        }
 
     }
 
@@ -71,6 +66,12 @@ public class IngredientsListAdapter extends RecyclerView.Adapter<IngredientsList
         } else {
             return ingredientsList.size();
         }
+    }
+
+    public void setData(ArrayList<Ingredients> ingredients) {
+
+        ingredientsList = ingredients;
+        notifyDataSetChanged();
     }
 
     public class IngredientsListAdapterViewHolder extends RecyclerView.ViewHolder {
@@ -85,7 +86,7 @@ public class IngredientsListAdapter extends RecyclerView.Adapter<IngredientsList
             if (itemView != null) {
                 quantityTextView = itemView.findViewById(R.id.ingredient_quantity_tv);
                 measureTextView = itemView.findViewById(R.id.ingredient_measure_tv);
-                ingredientTextView = itemView.findViewById(R.id.recipe_name_tv);
+                ingredientTextView = itemView.findViewById(R.id.ingredient_name_tv);
 
             }
         }

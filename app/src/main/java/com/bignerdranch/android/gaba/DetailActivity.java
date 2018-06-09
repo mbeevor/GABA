@@ -2,6 +2,7 @@ package com.bignerdranch.android.gaba;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -34,41 +35,34 @@ public class DetailActivity extends AppCompatActivity {
         ingredientsList = intent.getParcelableArrayListExtra("ingredientsList");
         setTitle(recipeName);
 
-        // hide media container
-        FrameLayout mediaFrameLayout = findViewById(R.id.media_container);
-        mediaFrameLayout.setVisibility(View.GONE);
+        // create new fragment if not previously created
+        if (savedInstanceState == null) {
 
+            //hide mediaplayer frame for default view which shows only ingredients
+            FrameLayout mediaPlayerCardView = findViewById(R.id.media_container);
+            mediaPlayerCardView.setVisibility(View.GONE);
 
-        // create onclicklistener for ingredients card
-        ingredientsCardView = findViewById(R.id.ingredients_card_view);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment detailFragment = fragmentManager.findFragmentById(R.id.recipe_instruction_container);
 
-        // determine if creating a one or two-pane display
-        if (findViewById(R.id.instruction_linear_layout) != null) {
+            if (detailFragment == null) {
+                detailFragment = new DetailFragment();
 
-            // create new fragment if not previously created
-            if (savedInstanceState == null) {
+                Bundle recipeBundleForFragment = new Bundle();
 
-                //hide mediaplayer frame for default view which shows only ingredients
-                FrameLayout mediaPlayerCardView = findViewById(R.id.media_container);
-                mediaPlayerCardView.setVisibility(View.GONE);
+                recipeBundleForFragment.putString("recipeName", recipeName);
+                recipeBundleForFragment.putParcelableArrayList("ingredientsList", ingredientsList);
 
-                if (ingredientsCardView != null) {
+                detailFragment.setArguments(recipeBundleForFragment);
 
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    DetailFragment detailFragment = new DetailFragment();
-
-                    Bundle recipeBundleForFragment = new Bundle();
-
-                    fragmentManager.beginTransaction()
-                            .add(R.id.recipe_instruction_container, detailFragment)
-                            .commit();
-
-                    Toast.makeText(this, "click", Toast.LENGTH_SHORT).show();
-
-                }
+                fragmentManager.beginTransaction()
+                        .add(R.id.recipe_instruction_container, detailFragment)
+                        .commit();
 
             }
-
         }
+
     }
+
+
 }

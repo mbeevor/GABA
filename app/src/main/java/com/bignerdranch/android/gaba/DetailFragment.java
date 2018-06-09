@@ -43,6 +43,7 @@ public class DetailFragment extends Fragment {
         if (recipeBundleForFragment != null) {
             recipeName = recipeBundleForFragment.getString("recipeName");
             ingredientsList = recipeBundleForFragment.getParcelableArrayList("ingredientsList");
+
         };
 
         View rootView = inflater.inflate(R.layout.fragment_ingredients_list, container, false);
@@ -57,9 +58,9 @@ public class DetailFragment extends Fragment {
         // set recyclerView to have a fixed size so that all items in the list are the same size.
         ingredientsRecyclerview.setHasFixedSize(true);
 
-        ingredientsListAdapter = new IngredientsListAdapter(ingredientsList);
+        ingredientsListAdapter = new IngredientsListAdapter(getContext());
+        ingredientsListAdapter.setData(ingredientsList);
         ingredientsRecyclerview.setAdapter(ingredientsListAdapter);
-        ingredientsListAdapter.notifyDataSetChanged();
         return rootView;
 
         }

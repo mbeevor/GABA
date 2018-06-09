@@ -24,9 +24,8 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.Stepli
     private Context context;
 
     //default constructor
-    public StepListAdapter(Context thisContext, ArrayList<Steps> steps) {
+    public StepListAdapter(Context thisContext) {
         context = thisContext;
-        stepsList = steps;
         setHasStableIds(true);
     }
 
@@ -73,6 +72,12 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.Stepli
         } else {
             return stepsList.size();
         }
+    }
+
+    public void setData(ArrayList<Steps> steps) {
+
+        stepsList = steps;
+        notifyDataSetChanged();
     }
 
     public class SteplistAdapterViewHolder extends RecyclerView.ViewHolder {
