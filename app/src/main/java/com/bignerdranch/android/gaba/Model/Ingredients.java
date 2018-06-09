@@ -64,7 +64,7 @@ public class Ingredients implements Parcelable {
 
             @Override
             public Ingredients[] newArray(int i) {
-                return new Ingredients[0];
+                return new Ingredients[i];
             }
         };
     }

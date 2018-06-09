@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.List;
 
 
-public class RecipeListFragment extends Fragment {
+public class MainListFragment extends Fragment {
 
     public RecyclerView recyclerView;
     public List<Recipe> recipeList;
@@ -29,7 +29,7 @@ public class RecipeListFragment extends Fragment {
     public RecipeListAdapter.OnRecipeClickListener onRecipeClickListener;
 
     // empty constructor
-    public RecipeListFragment() {
+    public MainListFragment() {
 
     }
 

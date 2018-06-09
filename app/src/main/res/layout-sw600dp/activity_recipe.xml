@@ -1,39 +1,41 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:baselineAligned="false"
     android:orientation="horizontal">
 
-    <fragment
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/activity_detail_fragment"
-        android:name="com.bignerdranch.android.gaba.DetailFragment"
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/activity_recipe_fragment"
+        android:name="com.bignerdranch.android.gaba.RecipeFragment"
         android:layout_width="@dimen/tablet_menu_width"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <!-- A small divider -->
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="@color/colorDivider"/>
+        android:background="@color/colorDivider" />
 
     <LinearLayout
         android:id="@+id/instruction_linear_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical">
+
 
         <FrameLayout
             android:id="@+id/media_container"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/media_height"/>
+            android:layout_height="0dp"
+            android:layout_weight="2" />
 
         <FrameLayout
             android:id="@+id/recipe_instruction_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
     </LinearLayout>
+
 
 </LinearLayout>

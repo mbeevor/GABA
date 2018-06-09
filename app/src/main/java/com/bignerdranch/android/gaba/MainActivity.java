@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
         recipe.putString("recipeImage", recipeSelected.getRecipeImage());
 
 
-        final Intent intent = new Intent(this, DetailActivity.class);
+        final Intent intent = new Intent(this, RecipeActivity.class);
         intent.putExtras(recipe);
 
         this.startActivity(intent);

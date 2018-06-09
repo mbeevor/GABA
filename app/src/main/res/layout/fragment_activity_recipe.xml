@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ingredients_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/detail_activity_list_height"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/margin"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="@dimen/padding">
+
+        <TextView
+            android:id="@+id/ingredients_list_tv"
+            style="@style/detail_list_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/ingredients_list" />
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/step_list_recylerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
