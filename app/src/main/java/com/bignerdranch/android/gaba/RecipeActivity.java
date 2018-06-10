@@ -33,10 +33,12 @@ public class RecipeActivity extends AppCompatActivity {
     private String recipeId;
     private String recipeName;
     private ArrayList<Ingredients> ingredientsList;
-    @BindView(R.id.ingredients_card_view) CardView ingredientsCardView;
+    @BindView(R.id.ingredients_card_view)
+    CardView ingredientsCardView;
     private ArrayList<Steps> stepsList;
     private String numberServings;
     private String recipeImage;
+    private boolean mediaPlayerHidden;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,36 +73,36 @@ public class RecipeActivity extends AppCompatActivity {
         // create new fragment of recipe steps if not previously created
         if (savedInstanceState == null) {
 
+            // pass recipe steps into recyclerview
             Fragment recipeFragment = new RecipeFragment();
-            recipeBundleForFragment.putParcelableArrayList(STEPS_LIST, stepsList);
             recipeFragment.setArguments(recipeBundleForFragment);
             fragmentManager.beginTransaction()
                     .add(R.id.step_list_container, recipeFragment)
                     .commit();
         }
 
-
-
         // determine if creating a one or two-pane display
         if (findViewById(R.id.instruction_linear_layout) != null) {
 
-            // create new fragment of ingredients if new
-            if (savedInstanceState == null) {
+            // create new fragment of ingredients to display by default
+            if (savedInstanceState == null || mediaPlayerHidden) {
 
+                mediaPlayerHidden = true;
                 hideMediaPlayer();
                 Fragment ingredientsFragment = new IngredientsFragment();
                 ingredientsFragment.setArguments(recipeBundleForFragment);
 
                 fragmentManager.beginTransaction()
-                        .add(R.id.recipe_instruction_container, ingredientsFragment)
+                        .replace(R.id.recipe_instruction_container, ingredientsFragment)
                         .commit();
-        }
+            }
 
-        // else, create onclicklistener to display ingredients when clicked
+            // else, create onclicklistener to display ingredients when menu item clicked
             ingredientsCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
+                    mediaPlayerHidden = true;
                     hideMediaPlayer();
                     Fragment newIngredientsFragment = new IngredientsFragment();
                     newIngredientsFragment.setArguments(recipeBundleForFragment);
@@ -108,31 +110,44 @@ public class RecipeActivity extends AppCompatActivity {
                     fragmentManager.beginTransaction()
                             .replace(R.id.recipe_instruction_container, newIngredientsFragment)
                             .commit();
+                }
+            });
+
+        } else {
+            // we're in single-pane mode
+            ingredientsCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                    intent.putExtras(recipeBundleForFragment);
+                    startActivity(intent);
 
                 }
             });
 
-    } else    {
-        // we're in single-pane mode
-        ingredientsCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                intent.putExtras(recipeBundleForFragment);
-                startActivity(intent);
-
-            }
-        });
-
+        }
     }
-
-}
 
     // hide media player when not used
     public void hideMediaPlayer() {
         //hide mediaplayer frame for default view which shows only ingredients
         FrameLayout mediaPlayerCardView = findViewById(R.id.media_container);
         mediaPlayerCardView.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // save state of mediaplayer for device rotation
+        if (mediaPlayerHidden) {
+            outState.putBoolean("mediaPlayerHidden", true);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        savedInstanceState.getBoolean("mediaPlayerHidden");
     }
 }

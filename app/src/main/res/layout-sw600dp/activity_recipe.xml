@@ -24,7 +24,7 @@
 
             <TextView
                 android:id="@+id/ingredients_list_tv"
-                style="@style/ingredients_list_item"
+                style="@style/ingredients_menu_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/ingredients_list"/>

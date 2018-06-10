@@ -51,10 +51,8 @@ public class IngredientsListAdapter extends RecyclerView.Adapter<IngredientsList
 
         IngredientsListAdapterViewHolder viewHolder = holder;
 
-        viewHolder.quantityTextView.setText(itemQuantity);
-        viewHolder.measureTextView.setText(itemMeasure);
-        viewHolder.ingredientTextView.setText(itemIngredient);
-
+        String ingredientString = itemQuantity + " " + itemMeasure + " " + itemIngredient;
+        viewHolder.ingredientTextView.setText(ingredientString);
 
     }
 
@@ -84,9 +82,7 @@ public class IngredientsListAdapter extends RecyclerView.Adapter<IngredientsList
             super(itemView);
 
             if (itemView != null) {
-                quantityTextView = itemView.findViewById(R.id.ingredient_quantity_tv);
-                measureTextView = itemView.findViewById(R.id.ingredient_measure_tv);
-                ingredientTextView = itemView.findViewById(R.id.ingredient_name_tv);
+                        ingredientTextView = itemView.findViewById(R.id.ingredient_tv);
 
             }
         }

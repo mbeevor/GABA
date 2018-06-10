@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bignerdranch.android.gaba.Adapters.StepDetailAdapter;
 import com.bignerdranch.android.gaba.Adapters.StepListAdapter;
 import com.bignerdranch.android.gaba.Model.Steps;
 
@@ -23,7 +24,7 @@ import static com.bignerdranch.android.gaba.Model.Keys.STEPS_LIST;
 public class StepFragment extends Fragment {
 
     public RecyclerView stepRecyclerview;
-    public StepListAdapter stepListAdapter;
+    public StepDetailAdapter stepDetailAdapter;
     private ArrayList<Steps> stepsList;
 
     public StepFragment() {
@@ -56,14 +57,9 @@ public class StepFragment extends Fragment {
         // set recyclerView to have a fixed size so that all items in the list are the same size.
         stepRecyclerview.setHasFixedSize(true);
 
-        stepListAdapter = new StepListAdapter(getContext(), new StepListAdapter.OnStepClickHandler() {
-            @Override
-            public void onItemClick(View item, int position) {
-                //do nothing
-            }
-        });
-        stepListAdapter.setData(stepsList);
-        stepRecyclerview.setAdapter(stepListAdapter);
+        stepDetailAdapter = new StepDetailAdapter(getContext());
+        stepDetailAdapter.setData(stepsList);
+        stepRecyclerview.setAdapter(stepDetailAdapter);
         return rootView;
 
     }
