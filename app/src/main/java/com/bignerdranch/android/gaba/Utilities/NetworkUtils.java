@@ -2,6 +2,8 @@ package com.bignerdranch.android.gaba.Utilities;
 
 import android.net.Uri;
 
+import com.bignerdranch.android.gaba.Model.Keys;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -15,11 +17,10 @@ import java.util.Scanner;
 
 public class NetworkUtils {
 
-    public static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
 
     public static URL recipeUrl() {
 
-        Uri builtUri = Uri.parse(BASE_URL).buildUpon().build();
+        Uri builtUri = Uri.parse(Keys.BASE_URL).buildUpon().build();
 
         URL url = null;
         try {

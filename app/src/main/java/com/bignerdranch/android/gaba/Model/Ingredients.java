@@ -3,15 +3,20 @@ package com.bignerdranch.android.gaba.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Matthew on 03/06/2018.
  */
 
 public class Ingredients implements Parcelable {
 
-        private String itemQuantity;
-        private String itemMeasure;
-        private String itemIngredient;
+    @SerializedName("quantity")
+    private String itemQuantity;
+    @SerializedName("measure")
+    private String itemMeasure;
+    @SerializedName("ingredient")
+    private String itemIngredient;
 
 
         public Ingredients(String quantity, String measure, String ingredient) {

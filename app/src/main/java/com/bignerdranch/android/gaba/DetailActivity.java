@@ -5,13 +5,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.bignerdranch.android.gaba.Model.Ingredients;
-import com.bignerdranch.android.gaba.Model.Steps;
+import com.bignerdranch.android.gaba.Model.Keys;
 
 import java.util.ArrayList;
 
@@ -30,8 +28,8 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         Intent intent = getIntent();
-        recipeName = intent.getStringExtra("recipeName");
-        ingredientsList = intent.getParcelableArrayListExtra("ingredientsList");
+        recipeName = intent.getStringExtra(Keys.RECIPE_NAME);
+        ingredientsList = intent.getParcelableArrayListExtra(Keys.INGREDIENTS_LIST);
         setTitle(recipeName);
 
         // create new fragment if not previously created
@@ -42,23 +40,20 @@ public class DetailActivity extends AppCompatActivity {
             mediaPlayerCardView.setVisibility(View.GONE);
 
             FragmentManager fragmentManager = getSupportFragmentManager();
-            Fragment detailFragment = fragmentManager.findFragmentById(R.id.recipe_instruction_container);
+            Fragment ingredientsFragment = new IngredientsFragment();
 
-            if (detailFragment == null) {
-                detailFragment = new DetailFragment();
+            Bundle recipeBundleForFragment = new Bundle();
 
-                Bundle recipeBundleForFragment = new Bundle();
+            recipeBundleForFragment.putString(Keys.RECIPE_NAME, recipeName);
+            recipeBundleForFragment.putParcelableArrayList(Keys.INGREDIENTS_LIST, ingredientsList);
 
-                recipeBundleForFragment.putString("recipeName", recipeName);
-                recipeBundleForFragment.putParcelableArrayList("ingredientsList", ingredientsList);
+            ingredientsFragment.setArguments(recipeBundleForFragment);
 
-                detailFragment.setArguments(recipeBundleForFragment);
+            fragmentManager.beginTransaction()
+                    .add(R.id.recipe_instruction_container, ingredientsFragment)
+                    .commit();
 
-                fragmentManager.beginTransaction()
-                        .add(R.id.recipe_instruction_container, detailFragment)
-                        .commit();
 
-            }
         }
 
     }

@@ -19,13 +19,27 @@
         <item name="android:padding">@dimen/padding</item>
         <item name="android:layout_margin">@dimen/margin</item>
         <item name="android:textColor">@color/colorPrimaryText</item>
+        <item name="android:layout_gravity">center</item>
+
     </style>
 
-    <style name="detail_list_item" >
-        <item name="android:textSize">16sp</item>
+    <style name="ingredients_list_item" >
+        <item name="android:textSize">24sp</item>
+        <item name="android:padding">@dimen/padding</item>
+        <item name="android:layout_margin">@dimen/margin</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@color/colorPrimaryLight</item>
+
+    </style>
+
+    <style name="step_list_item" >
+        <item name="android:textSize">24sp</item>
         <item name="android:padding">@dimen/padding</item>
         <item name="android:layout_margin">@dimen/margin</item>
         <item name="android:textColor">@color/colorPrimaryText</item>
+        <item name="android:layout_gravity">center</item>
+
     </style>
 
 </resources>

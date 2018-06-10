@@ -1,5 +1,6 @@
 package com.bignerdranch.android.gaba;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -50,6 +51,12 @@ public class MainListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
+
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading");
+        progressDialog.show();
+
+
         final View rootView = inflater.inflate(R.layout.fragment_activity_main, container, false);
 
         recyclerView = rootView.findViewById(R.id.recipe_list_recyclerview);
@@ -71,6 +78,8 @@ public class MainListFragment extends Fragment {
 
         recyclerView.setAdapter(recipeListAdapter);
         loadRecipeList();
+
+        progressDialog.dismiss();
 
         // Return the root view
         return rootView;

@@ -3,6 +3,8 @@ package com.bignerdranch.android.gaba.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 /**
@@ -11,11 +13,17 @@ import java.util.ArrayList;
 
 public class Recipe implements Parcelable {
 
+    @SerializedName("id")
     private String recipeId;
+    @SerializedName("name")
     private String recipeName;
+    @SerializedName("ingredients")
     private ArrayList<Ingredients> ingredientsList;
+    @SerializedName("steps")
     private ArrayList<Steps> stepsList;
+    @SerializedName("servings")
     private String numberServings;
+    @SerializedName("image")
     private String recipeImage;
 
     public Recipe(String id, String name, ArrayList<Ingredients> ingredients, ArrayList<Steps> steps, String servings, String image) {

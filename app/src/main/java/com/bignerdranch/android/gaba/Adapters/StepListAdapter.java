@@ -21,11 +21,22 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.Stepli
 
     private List<Steps> stepsList;
     private Context context;
+    private OnStepClickHandler onStepClickHandler;
+
+    public interface OnStepClickHandler {
+        void onItemClick(View item, int position);
+    }
 
     //default constructor
-    public StepListAdapter(Context thisContext) {
+    public StepListAdapter(Context thisContext, OnStepClickHandler handler) {
         context = thisContext;
+        onStepClickHandler = handler;
         setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
@@ -45,22 +56,13 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.Stepli
         if (stepsList != null) {
 
             Steps steps = stepsList.get(position);
-            String id = steps.getStepId();
             String summary = steps.getShortDescription();
-            String description = steps.getLongDescription();
-            String video = steps.getVideoUrl();
-            String thumbnail = steps.getThumbnailUrl();
 
             SteplistAdapterViewHolder viewHolder = holder;
-            viewHolder.idTextView.setText(id);
+            viewHolder.summaryTextView.setText(summary);
 
         }
 
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
     }
 
     @Override
@@ -79,16 +81,29 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.Stepli
         notifyDataSetChanged();
     }
 
-    public class SteplistAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class SteplistAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView idTextView;
+        public TextView summaryTextView;
 
         public SteplistAdapterViewHolder(final View itemView) {
             super(itemView);
 
             if (itemView != null) {
-                idTextView = itemView.findViewById(R.id.step_name_tv);
+                summaryTextView = itemView.findViewById(R.id.step_name_tv);
+                itemView.setOnClickListener(this);
             }
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            if (stepsList != null) {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    onStepClickHandler.onItemClick(view, position);
+                }
+            }
+
         }
     }
 }

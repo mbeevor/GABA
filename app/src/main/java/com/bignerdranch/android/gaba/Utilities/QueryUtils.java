@@ -3,6 +3,7 @@ package com.bignerdranch.android.gaba.Utilities;
 import android.text.TextUtils;
 
 import com.bignerdranch.android.gaba.Model.Ingredients;
+import com.bignerdranch.android.gaba.Model.Keys;
 import com.bignerdranch.android.gaba.Model.Recipe;
 import com.bignerdranch.android.gaba.Model.Steps;
 
@@ -18,20 +19,7 @@ import java.util.ArrayList;
 
 public class QueryUtils {
 
-    private static final String ID = "id";
-    private static final String NAME = "name";
-    private static final String INGREDIENTS_LIST = "ingredients";
-    private static final String QUANTITY = "quantity";
-    private static final String MEASURE = "measure";
-    private static final String INGREDIENT = "ingredient";
-    private static final String STEPS = "steps";
-    private static final String STEPS_ID = "id";
-    private static final String SHORT_DESCRIPTION = "shortDescription";
-    private static final String DESCRIPTION = "description";
-    private static final String VIDEO_URL = "videoURL";
-    private static final String THUMBNAIL = "thumbnailURL";
-    private static final String SERVINGS = "servings";
-    private static final String IMAGE = "image";
+
 
     public static ArrayList<Recipe> getSimpleRecipeQueryStringFromJson(String recipeJson) {
 
@@ -40,8 +28,6 @@ public class QueryUtils {
         }
 
         ArrayList<Recipe> recipesList = new ArrayList<>();
-        ArrayList<Ingredients> ingredientsList = new ArrayList<>();
-        ArrayList<Steps> stepsList = new ArrayList<>();
 
         try {
 
@@ -51,18 +37,20 @@ public class QueryUtils {
 
             JSONObject recipeObject = recipeListArray.getJSONObject(i);
 
-            String recipeId = recipeObject.getString(ID);
-            String recipeName = recipeObject.getString(NAME);
+            String recipeId = recipeObject.getString(Keys.ID);
+            String recipeName = recipeObject.getString(Keys.NAME);
 
-            JSONArray ingredientsArray = recipeObject.getJSONArray(INGREDIENTS_LIST);
+            JSONArray ingredientsArray = recipeObject.getJSONArray(Keys.INGREDIENTS);
+                ArrayList<Ingredients> ingredientsList = new ArrayList<>();
 
-            for (int j = 0; j <ingredientsArray.length(); j++) {
+
+                for (int j = 0; j <ingredientsArray.length(); j++) {
 
                 JSONObject currentRecipe = ingredientsArray.getJSONObject(j);
 
-                String quantity = currentRecipe.getString(QUANTITY);
-                String measure = currentRecipe.getString(MEASURE);
-                String ingredient = currentRecipe.getString(INGREDIENT);
+                String quantity = currentRecipe.getString(Keys.QUANTITY);
+                String measure = currentRecipe.getString(Keys.MEASURE);
+                String ingredient = currentRecipe.getString(Keys.INGREDIENT);
 
 
                 Ingredients ingredientItem = new Ingredients(quantity, measure, ingredient);
@@ -70,25 +58,27 @@ public class QueryUtils {
             }
 
 
-            JSONArray stepsArray = recipeObject.getJSONArray(STEPS);
+            JSONArray stepsArray = recipeObject.getJSONArray(Keys.STEPS);
+                ArrayList<Steps> stepsList = new ArrayList<>();
 
-            for (int k = 0; k <stepsArray.length(); k++) {
+
+                for (int k = 0; k <stepsArray.length(); k++) {
 
                 JSONObject currentRecipe = stepsArray.getJSONObject(k);
 
-                String id = currentRecipe.getString(STEPS_ID);
-                String shortDescription = currentRecipe.getString(SHORT_DESCRIPTION);
-                String description = currentRecipe.getString(DESCRIPTION);
-                String videoUrl = currentRecipe.getString(VIDEO_URL);
-                String thumbnailUrl = currentRecipe.getString(THUMBNAIL);
+                String id = currentRecipe.getString(Keys.STEPS_ID);
+                String shortDescription = currentRecipe.getString(Keys.SHORT_DESCRIPTION);
+                String description = currentRecipe.getString(Keys.DESCRIPTION);
+                String videoUrl = currentRecipe.getString(Keys.VIDEO_URL);
+                String thumbnailUrl = currentRecipe.getString(Keys.THUMBNAIL);
 
                 Steps step = new Steps(id, shortDescription, description, videoUrl, thumbnailUrl);
                 stepsList.add(step);
 
             }
 
-            String numberServings = recipeObject.getString(SERVINGS);
-            String recipeImage = recipeObject.getString(IMAGE);
+            String numberServings = recipeObject.getString(Keys.SERVINGS);
+            String recipeImage = recipeObject.getString(Keys.IMAGE);
 
 
             Recipe recipe = new Recipe(recipeId,

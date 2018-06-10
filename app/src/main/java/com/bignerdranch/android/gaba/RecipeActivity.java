@@ -1,22 +1,28 @@
 package com.bignerdranch.android.gaba;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bignerdranch.android.gaba.Model.Ingredients;
-import com.bignerdranch.android.gaba.Model.Recipe;
 import com.bignerdranch.android.gaba.Model.Steps;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+import static com.bignerdranch.android.gaba.Model.Keys.INGREDIENTS_LIST;
+import static com.bignerdranch.android.gaba.Model.Keys.NUMBER_SERVINGS;
+import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_ID;
+import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_IMAGE;
+import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_NAME;
+import static com.bignerdranch.android.gaba.Model.Keys.STEPS_LIST;
 
 /**
  * Created by Matthew on 26/05/2018.
@@ -27,7 +33,7 @@ public class RecipeActivity extends AppCompatActivity {
     private String recipeId;
     private String recipeName;
     private ArrayList<Ingredients> ingredientsList;
-    private CardView ingredientsCardView;
+    @BindView(R.id.ingredients_card_view) CardView ingredientsCardView;
     private ArrayList<Steps> stepsList;
     private String numberServings;
     private String recipeImage;
@@ -36,76 +42,97 @@ public class RecipeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+        ButterKnife.bind(this);
 
+        // get intent from main activity
         Intent intent = getIntent();
-        recipeId = intent.getStringExtra("recipeId");
-        recipeName = intent.getStringExtra("recipeName");
-        ingredientsList = intent.getParcelableArrayListExtra("ingredientsList");
-        stepsList = intent.getParcelableArrayListExtra("stepsList");
-        numberServings = intent.getStringExtra("numberServings");
-        recipeImage = intent.getStringExtra("recipeImage");
+        recipeId = intent.getStringExtra(RECIPE_ID);
+        recipeName = intent.getStringExtra(RECIPE_NAME);
+        ingredientsList = intent.getParcelableArrayListExtra(INGREDIENTS_LIST);
+        stepsList = intent.getParcelableArrayListExtra(STEPS_LIST);
+        numberServings = intent.getStringExtra(NUMBER_SERVINGS);
+        recipeImage = intent.getStringExtra(RECIPE_IMAGE);
 
         // update app name to name of recipe selected
         setTitle(recipeName);
 
-        // find ingredients card to create onclicklistener later
-        ingredientsCardView = findViewById(R.id.ingredients_card_view);
+        // create a FragmentManager to handle all fragments
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // create recipe bundle
+        final Bundle recipeBundleForFragment = new Bundle();
+        recipeBundleForFragment.putString(RECIPE_ID, recipeId);
+        recipeBundleForFragment.putString(RECIPE_NAME, recipeName);
+        recipeBundleForFragment.putParcelableArrayList(INGREDIENTS_LIST, ingredientsList);
+        recipeBundleForFragment.putParcelableArrayList(STEPS_LIST, stepsList);
+        recipeBundleForFragment.putString(NUMBER_SERVINGS, numberServings);
+        recipeBundleForFragment.putString(RECIPE_IMAGE, recipeImage);
+
+        // create new fragment of recipe steps if not previously created
+        if (savedInstanceState == null) {
+
+            Fragment recipeFragment = new RecipeFragment();
+            recipeBundleForFragment.putParcelableArrayList(STEPS_LIST, stepsList);
+            recipeFragment.setArguments(recipeBundleForFragment);
+            fragmentManager.beginTransaction()
+                    .add(R.id.step_list_container, recipeFragment)
+                    .commit();
+        }
+
+
 
         // determine if creating a one or two-pane display
         if (findViewById(R.id.instruction_linear_layout) != null) {
 
-            // create new fragment if not previously created
+            // create new fragment of ingredients if new
             if (savedInstanceState == null) {
 
-                //hide mediaplayer frame for default view which shows only ingredients
-                FrameLayout mediaPlayerCardView = findViewById(R.id.media_container);
-                mediaPlayerCardView.setVisibility(View.GONE);
+                hideMediaPlayer();
+                Fragment ingredientsFragment = new IngredientsFragment();
+                ingredientsFragment.setArguments(recipeBundleForFragment);
 
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                Fragment detailFragment = fragmentManager.findFragmentById(R.id.recipe_instruction_container);
+                fragmentManager.beginTransaction()
+                        .add(R.id.recipe_instruction_container, ingredientsFragment)
+                        .commit();
+        }
 
-                if (detailFragment == null) {
-
-                    detailFragment = new DetailFragment();
-
-                    Bundle recipeBundleForFragment = new Bundle();
-
-                    recipeBundleForFragment.putString("recipeId", recipeId);
-                    recipeBundleForFragment.putString("recipeName", recipeName);
-                    recipeBundleForFragment.putParcelableArrayList("ingredientsList", ingredientsList);
-                    recipeBundleForFragment.putParcelableArrayList("stepsList", stepsList);
-                    recipeBundleForFragment.putString("numberServings", numberServings);
-                    recipeBundleForFragment.putString("recipeImage", recipeImage);
-
-                    detailFragment.setArguments(recipeBundleForFragment);
-
-                    fragmentManager.beginTransaction()
-                            .add(R.id.recipe_instruction_container, detailFragment)
-                            .commit();
-
-                }
-
-
-            }
-
-        } else {
-            // we're in single-pane mode
+        // else, create onclicklistener to display ingredients when clicked
             ingredientsCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    Bundle listOfIngredients = new Bundle();
-                    listOfIngredients.putString("recipeName", recipeName);
-                    listOfIngredients.putParcelableArrayList("ingredientsList", ingredientsList);
+                    hideMediaPlayer();
+                    Fragment newIngredientsFragment = new IngredientsFragment();
+                    newIngredientsFragment.setArguments(recipeBundleForFragment);
 
-                    Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                    intent.putExtras(listOfIngredients);
-                    startActivity(intent);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.recipe_instruction_container, newIngredientsFragment)
+                            .commit();
 
                 }
             });
 
+    } else    {
+        // we're in single-pane mode
+        ingredientsCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        }
+                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                intent.putExtras(recipeBundleForFragment);
+                startActivity(intent);
+
+            }
+        });
+
+    }
+
+}
+
+    // hide media player when not used
+    public void hideMediaPlayer() {
+        //hide mediaplayer frame for default view which shows only ingredients
+        FrameLayout mediaPlayerCardView = findViewById(R.id.media_container);
+        mediaPlayerCardView.setVisibility(View.GONE);
     }
 }
