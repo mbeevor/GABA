@@ -52,7 +52,7 @@ public class MainListFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_activity_main, container, false);
 
-        recyclerView = rootView.findViewById(R.id.recipe_list_recylerview);
+        recyclerView = rootView.findViewById(R.id.recipe_list_recyclerview);
 
         // create Grid LayoutManager
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), setGridColumns());

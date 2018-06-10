@@ -83,7 +83,6 @@ public class RecipeActivity extends AppCompatActivity {
                             .add(R.id.recipe_instruction_container, detailFragment)
                             .commit();
 
-
                 }
 
 

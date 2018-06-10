@@ -24,20 +24,22 @@ public class RecipeFragment extends Fragment {
     public StepListAdapter stepListAdapter;
     ArrayList<Steps> stepList;
 
+    // empty constructor
+    public RecipeFragment() {    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        savedInstanceState = getArguments();
-        if (savedInstanceState != null) {
-            stepList = savedInstanceState.getParcelableArrayList("ingredientsList");
-
-        };
         super.onCreateView(inflater, container, savedInstanceState);
+        savedInstanceState = getArguments();
+        if (getArguments() != null) {
+            stepList = savedInstanceState.getParcelableArrayList("stepList");
+        };
 
         View rootView = inflater.inflate(R.layout.fragment_activity_recipe, container, false);
 
-        stepRecyclerview = rootView.findViewById(R.id.step_list_recylerview);
+        stepRecyclerview = rootView.findViewById(R.id.step_list_recyclerview);
 
         // create Linear LayoutManager
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),

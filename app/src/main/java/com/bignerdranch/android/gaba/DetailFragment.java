@@ -22,8 +22,6 @@ public class DetailFragment extends Fragment {
 
     public RecyclerView ingredientsRecyclerview;
     public IngredientsListAdapter ingredientsListAdapter;
-    private String recipeId;
-    private String recipeName;
     private ArrayList<Ingredients> ingredientsList;
 
     public DetailFragment() {
@@ -41,9 +39,7 @@ public class DetailFragment extends Fragment {
                              Bundle recipeBundleForFragment) {
         recipeBundleForFragment = getArguments();
         if (recipeBundleForFragment != null) {
-            recipeName = recipeBundleForFragment.getString("recipeName");
             ingredientsList = recipeBundleForFragment.getParcelableArrayList("ingredientsList");
-
         };
 
         View rootView = inflater.inflate(R.layout.fragment_ingredients_list, container, false);

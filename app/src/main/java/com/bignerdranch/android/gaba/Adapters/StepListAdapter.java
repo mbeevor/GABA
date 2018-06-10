@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.bignerdranch.android.gaba.Model.Ingredients;
 import com.bignerdranch.android.gaba.Model.Steps;
 import com.bignerdranch.android.gaba.R;
 
@@ -32,8 +31,8 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.Stepli
     @Override
     public SteplistAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        int layoutForSteps = R.layout.list_item_detail;
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        int layoutForSteps = R.layout.list_item_step;
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
 
         View view = layoutInflater.inflate(layoutForSteps, parent, false);
         SteplistAdapterViewHolder viewHolder = new SteplistAdapterViewHolder(view);

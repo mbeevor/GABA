@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_recipe_fragment"
     android:name="com.bignerdranch.android.gaba.RecipeFragment"
-    android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"/>
+    android:layout_height="wrap_content" />

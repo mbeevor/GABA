@@ -23,7 +23,6 @@ public class DetailActivity extends AppCompatActivity {
 
     private String recipeName;
     private ArrayList<Ingredients> ingredientsList;
-    private CardView ingredientsCardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
