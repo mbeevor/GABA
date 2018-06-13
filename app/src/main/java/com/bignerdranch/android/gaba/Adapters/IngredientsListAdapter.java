@@ -2,7 +2,6 @@ package com.bignerdranch.android.gaba.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,9 @@ import com.bignerdranch.android.gaba.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by mbeev on 07/06/2018.
@@ -74,17 +76,12 @@ public class IngredientsListAdapter extends RecyclerView.Adapter<IngredientsList
 
     public class IngredientsListAdapterViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView quantityTextView;
-        public TextView measureTextView;
-        public TextView ingredientTextView;
+        @BindView(R.id.ingredient_tv) private TextView ingredientTextView;
 
-        public IngredientsListAdapterViewHolder(final View itemView) {
+        private IngredientsListAdapterViewHolder(final View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
 
-            if (itemView != null) {
-                        ingredientTextView = itemView.findViewById(R.id.ingredient_tv);
-
-            }
         }
     }
 }

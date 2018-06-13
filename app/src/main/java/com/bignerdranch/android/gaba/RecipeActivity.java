@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import com.bignerdranch.android.gaba.Model.Ingredients;
 import com.bignerdranch.android.gaba.Model.Steps;
@@ -38,7 +37,6 @@ public class RecipeActivity extends AppCompatActivity {
     private ArrayList<Steps> stepsList;
     private String numberServings;
     private String recipeImage;
-    private boolean mediaPlayerHidden;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +72,10 @@ public class RecipeActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
 
             // pass recipe steps into recyclerview
-            Fragment recipeFragment = new RecipeFragment();
-            recipeFragment.setArguments(recipeBundleForFragment);
+            Fragment stepListFragment = new StepListFragment();
+            stepListFragment.setArguments(recipeBundleForFragment);
             fragmentManager.beginTransaction()
-                    .add(R.id.step_list_container, recipeFragment)
+                    .add(R.id.step_list_container, stepListFragment)
                     .commit();
         }
 
@@ -85,10 +83,8 @@ public class RecipeActivity extends AppCompatActivity {
         if (findViewById(R.id.instruction_linear_layout) != null) {
 
             // create new fragment of ingredients to display by default
-            if (savedInstanceState == null || mediaPlayerHidden) {
+            if (savedInstanceState == null) {
 
-                mediaPlayerHidden = true;
-                hideMediaPlayer();
                 Fragment ingredientsFragment = new IngredientsFragment();
                 ingredientsFragment.setArguments(recipeBundleForFragment);
 
@@ -102,8 +98,6 @@ public class RecipeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    mediaPlayerHidden = true;
-                    hideMediaPlayer();
                     Fragment newIngredientsFragment = new IngredientsFragment();
                     newIngredientsFragment.setArguments(recipeBundleForFragment);
 
@@ -129,25 +123,4 @@ public class RecipeActivity extends AppCompatActivity {
         }
     }
 
-    // hide media player when not used
-    public void hideMediaPlayer() {
-        //hide mediaplayer frame for default view which shows only ingredients
-        FrameLayout mediaPlayerCardView = findViewById(R.id.media_container);
-        mediaPlayerCardView.setVisibility(View.GONE);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        // save state of mediaplayer for device rotation
-        if (mediaPlayerHidden) {
-            outState.putBoolean("mediaPlayerHidden", true);
-        }
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        savedInstanceState.getBoolean("mediaPlayerHidden");
-    }
 }

@@ -13,6 +13,9 @@ import com.bignerdranch.android.gaba.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by mbeev on 08/06/2018.
  */
@@ -83,15 +86,12 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.Stepli
 
     public class SteplistAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView summaryTextView;
+        @BindView(R.id.step_name_tv) private TextView summaryTextView;
 
-        public SteplistAdapterViewHolder(final View itemView) {
+        private SteplistAdapterViewHolder(final View itemView) {
             super(itemView);
-
-            if (itemView != null) {
-                summaryTextView = itemView.findViewById(R.id.step_name_tv);
-                itemView.setOnClickListener(this);
-            }
+            ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
         @Override

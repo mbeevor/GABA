@@ -2,6 +2,9 @@
     <string name="app_name">GABA</string>
     <string name="long_app_name">Great Android Baking App</string>
 
+    <string name="empty_view">No recipes to show - check your network connection.</string>
+
+
     <!-- place holder text -->
     <string name="recipe_name_placeholder">Recipe Name</string>
     <string name="detail_list_placeholder">Recipe Step</string>

@@ -40,9 +40,9 @@ public class IngredientsFragment extends Fragment {
             ingredientsList = recipeBundleForFragment.getParcelableArrayList(Keys.INGREDIENTS_LIST);
         }
 
-        View rootView = inflater.inflate(R.layout.fragment_ingredients_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_activity_list, container, false);
 
-        ingredientsRecyclerview = rootView.findViewById(R.id.ingredients_recycler_view);
+        ingredientsRecyclerview = rootView.findViewById(R.id.list_recyclerview);
 
         // create Linear LayoutManager
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),

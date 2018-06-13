@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/detail_card_view"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:layout_gravity="center_vertical"
+    android:layout_height="@dimen/detail_activity_list_height"
     android:layout_margin="@dimen/margin"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="@dimen/padding">
+    card_view:cardCornerRadius="@dimen/corner_radius"
+    card_view:cardElevation="@dimen/elevation">
 
     <TextView
         android:id="@+id/step_name_tv"
-        style="@style/step_list_item"
+        style="@style/step_menu_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="@string/detail_list_placeholder" />

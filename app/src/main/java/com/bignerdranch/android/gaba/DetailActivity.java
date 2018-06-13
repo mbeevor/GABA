@@ -6,12 +6,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.bignerdranch.android.gaba.Model.Ingredients;
 import com.bignerdranch.android.gaba.Model.Keys;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by mbeev on 08/06/2018.
@@ -21,11 +24,14 @@ public class DetailActivity extends AppCompatActivity {
 
     private String recipeName;
     private ArrayList<Ingredients> ingredientsList;
+    @BindView(R.id.buttons)
+    RelativeLayout buttons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         recipeName = intent.getStringExtra(Keys.RECIPE_NAME);
@@ -35,9 +41,8 @@ public class DetailActivity extends AppCompatActivity {
         // create new fragment if not previously created
         if (savedInstanceState == null) {
 
-            //hide mediaplayer frame for default view which shows only ingredients
-            FrameLayout mediaPlayerCardView = findViewById(R.id.media_container);
-            mediaPlayerCardView.setVisibility(View.GONE);
+            // hide navigation buttons when showing ingredients
+            buttons.setVisibility(View.GONE);
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             Fragment ingredientsFragment = new IngredientsFragment();

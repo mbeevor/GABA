@@ -18,13 +18,11 @@
         <item name="android:textSize">28sp</item>
         <item name="android:padding">@dimen/padding</item>
         <item name="android:layout_margin">@dimen/margin</item>
-        <item name="android:textColor">@color/colorPrimaryText</item>
-        <item name="android:layout_gravity">center</item>
-
+        <item name="android:textColor">@color/colorPrimaryDark</item>
     </style>
 
     <style name="ingredients_menu_item" >
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:padding">@dimen/padding</item>
         <item name="android:layout_margin">@dimen/margin</item>
         <item name="android:textColor">@color/colorAccent</item>
@@ -32,20 +30,28 @@
         <item name="android:background">@color/colorPrimaryLight</item>
     </style>
 
+    <style name="step_menu_item" >
+        <item name="android:textSize">20sp</item>
+        <item name="android:padding">@dimen/padding</item>
+        <item name="android:layout_margin">@dimen/margin</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
     <style name="ingredients_list_item" >
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:padding">@dimen/padding</item>
         <item name="android:layout_margin">@dimen/margin</item>
         <item name="android:textColor">@color/colorPrimaryText</item>
     </style>
 
     <style name="step_list_item" >
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:padding">@dimen/padding</item>
         <item name="android:layout_margin">@dimen/margin</item>
         <item name="android:textColor">@color/colorPrimaryText</item>
-        <item name="android:layout_gravity">center</item>
 
     </style>
+
 
 </resources>
