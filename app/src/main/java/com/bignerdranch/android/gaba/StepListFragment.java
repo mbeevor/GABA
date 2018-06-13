@@ -1,5 +1,6 @@
 package com.bignerdranch.android.gaba;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,9 +14,9 @@ import com.bignerdranch.android.gaba.Adapters.StepListAdapter;
 import com.bignerdranch.android.gaba.Model.Steps;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.bignerdranch.android.gaba.Model.Keys.NUMBER_SERVINGS;
-import static com.bignerdranch.android.gaba.Model.Keys.POSITION;
 import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_ID;
 import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_IMAGE;
 import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_NAME;
@@ -38,6 +39,19 @@ public class StepListFragment extends Fragment {
 
     // empty constructor
     public StepListFragment() {    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            onStepSelected = (StepListAdapter.OnStepClickHandler) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement onRecipeClickListener");
+        }
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -68,20 +82,10 @@ public class StepListFragment extends Fragment {
 
         stepListAdapter = new StepListAdapter(getContext(), new StepListAdapter.OnStepClickHandler() {
             @Override
-            public void onItemClick(View item, int position) {
-
-                Fragment stepDetailFragment = new StepDetailFragment();
-                Bundle stepBundleForFragment = new Bundle();
-                stepBundleForFragment.putInt(POSITION, position);
-                stepBundleForFragment.putParcelableArrayList(STEPS_LIST, stepsList);
-
-                stepDetailFragment.setArguments(stepBundleForFragment);
-
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.recipe_instruction_container, stepDetailFragment)
-                        .commit();
-
+            public void onItemClick(List<Steps> steps, int position) {
+                onStepSelected.onItemClick(stepsList, position);
             }
+
         });
 
         stepListAdapter.setData(stepsList);

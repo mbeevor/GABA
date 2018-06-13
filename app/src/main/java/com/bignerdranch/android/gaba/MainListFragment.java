@@ -62,7 +62,6 @@ public class MainListFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_activity_main, container, false);
         ButterKnife.bind(this, rootView);
 
-        showLoadingView();
 
         recyclerView = rootView.findViewById(R.id.list_recyclerview);
 
@@ -82,12 +81,9 @@ public class MainListFragment extends Fragment {
         });
 
         recyclerView.setAdapter(recipeListAdapter);
-        if (recipeListAdapter.getItemCount() == 0) {
-            showErrorView();
-        } else {
+
             loadRecipeList();
-            showResultsView();
-        }
+
 
         // Return the root view
         return rootView;

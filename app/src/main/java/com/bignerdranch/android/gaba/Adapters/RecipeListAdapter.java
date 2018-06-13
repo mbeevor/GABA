@@ -106,10 +106,10 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     public class RecipeListAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
-        @BindView(R.id.recipe_name_tv) private TextView recipeNameTextView;
-        @BindView(R.id.recipe_name_iv) private ImageView recipeNameImageView;
+        @BindView(R.id.recipe_name_tv) public TextView recipeNameTextView;
+        @BindView(R.id.recipe_name_iv) public ImageView recipeNameImageView;
 
-        private RecipeListAdapterViewHolder(final View itemView) {
+        public RecipeListAdapterViewHolder(final View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);

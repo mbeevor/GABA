@@ -8,16 +8,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
 
+import com.bignerdranch.android.gaba.Adapters.StepListAdapter;
 import com.bignerdranch.android.gaba.Model.Ingredients;
 import com.bignerdranch.android.gaba.Model.Steps;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.bignerdranch.android.gaba.Model.Keys.INGREDIENTS_LIST;
 import static com.bignerdranch.android.gaba.Model.Keys.NUMBER_SERVINGS;
+import static com.bignerdranch.android.gaba.Model.Keys.POSITION;
 import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_ID;
 import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_IMAGE;
 import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_NAME;
@@ -27,7 +30,7 @@ import static com.bignerdranch.android.gaba.Model.Keys.STEPS_LIST;
  * Created by Matthew on 26/05/2018.
  */
 
-public class RecipeActivity extends AppCompatActivity {
+public class RecipeActivity extends AppCompatActivity implements StepListAdapter.OnStepClickHandler {
 
     private String recipeId;
     private String recipeName;
@@ -120,7 +123,33 @@ public class RecipeActivity extends AppCompatActivity {
                 }
             });
 
+
         }
     }
 
+    @Override
+    public void onItemClick(List<Steps> steps, int position) {
+
+        // determine if displaying one or two-panes
+        if (findViewById(R.id.instruction_linear_layout) != null) {
+
+            // two pane - so replace right hand fragment with recipe selected
+            Fragment stepDetailFragment = new StepDetailFragment();
+            Bundle stepBundleForFragment = new Bundle();
+            stepBundleForFragment.putInt(POSITION, position);
+            stepBundleForFragment.putParcelableArrayList(STEPS_LIST, stepsList);
+
+            stepDetailFragment.setArguments(stepBundleForFragment);
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.recipe_instruction_container, stepDetailFragment)
+                    .commit();
+
+        } else {
+
+            // one pane - so laun
+
+        }
+    }
 }
