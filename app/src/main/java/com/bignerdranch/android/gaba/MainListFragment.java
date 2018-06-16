@@ -89,7 +89,7 @@ public class MainListFragment extends Fragment {
         return rootView;
     }
 
-    private void loadRecipeList() {
+    public void loadRecipeList() {
 
         URL getRecipeListUrl = NetworkUtils.recipeUrl();
         new GetRecipeListDataTask(new GetRecipeDataListener())

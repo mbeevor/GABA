@@ -25,7 +25,6 @@ import static com.bignerdranch.android.gaba.Model.Keys.POSITION;
 import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_ID;
 import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_IMAGE;
 import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_NAME;
-import static com.bignerdranch.android.gaba.Model.Keys.STEPS_ID;
 import static com.bignerdranch.android.gaba.Model.Keys.STEPS_LIST;
 
 /**
@@ -157,7 +156,6 @@ public class RecipeActivity extends AppCompatActivity implements StepListAdapter
             Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
             intent.putExtras(stepBundleForFragment);
             startActivity(intent);
-
 
         }
     }

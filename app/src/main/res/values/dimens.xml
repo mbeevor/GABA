@@ -13,4 +13,9 @@
     <dimen name="elevation">6dp</dimen>
 
 
+    <!-- widget -->
+    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="widget_height">40dp</dimen>
+    <dimen name="widget_width">40dp</dimen>
+
 </resources>
