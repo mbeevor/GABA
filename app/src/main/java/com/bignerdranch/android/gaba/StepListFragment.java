@@ -32,10 +32,6 @@ public class StepListFragment extends Fragment {
     public StepListAdapter stepListAdapter;
     public ArrayList<Steps> stepsList;
     public StepListAdapter.OnStepClickHandler onStepSelected;
-    private String recipeId;
-    private String recipeName;
-    private String numberServings;
-    private String recipeImage;
 
     // empty constructor
     public StepListFragment() {    }
@@ -60,11 +56,7 @@ public class StepListFragment extends Fragment {
         super.onCreateView(inflater, container, intent);
         intent = getArguments();
         if (getArguments() != null) {
-            recipeId = intent.getString(RECIPE_ID);
-            recipeName = intent.getString(RECIPE_NAME);
             stepsList = intent.getParcelableArrayList(STEPS_LIST);
-            numberServings = intent.getString(NUMBER_SERVINGS);
-            recipeImage = intent.getString(RECIPE_IMAGE);
             stepsList = intent.getParcelableArrayList(STEPS_LIST);
         }
 

@@ -16,6 +16,7 @@ public class Keys {
     public static final String QUANTITY = "quantity";
     public static final String MEASURE = "measure";
     public static final String INGREDIENT = "ingredient";
+    public static final String INGREDIENTS_CARD = "ingredients_card";
     public static final String STEPS = "steps";
     public static final String STEPS_LIST = "stepsList";
     public static final String STEPS_ID = "id";

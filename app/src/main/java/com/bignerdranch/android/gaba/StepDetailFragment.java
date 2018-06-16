@@ -47,7 +47,7 @@ public class StepDetailFragment extends Fragment {
 
         TextView textView = rootView.findViewById(R.id.step_tv);
 
-        if (textView != null) {
+        if (textView != null || stepsList != null) {
 
             Steps currentStep = stepsList.get(position);
             textView.setText(currentStep.getLongDescription());

@@ -3,14 +3,17 @@
     <string name="long_app_name">Great Android Baking App</string>
 
     <string name="empty_view">No recipes to show - check your network connection.</string>
-
+    <string name="number_servings">Number of servings: </string>
 
     <!-- place holder text -->
     <string name="recipe_name_placeholder">Recipe Name</string>
     <string name="detail_list_placeholder">Recipe Step</string>
     <string name="ingredients_list">Ingredients you\'ll need</string>
 
+    <!-- button text -->
     <string name="previous">Back</string>
     <string name="next">Next step</string>
+    <string name="no_more_steps">No more steps to show</string>
+    <string name="no_previous_steps">No previous steps to show</string>
 
 </resources>

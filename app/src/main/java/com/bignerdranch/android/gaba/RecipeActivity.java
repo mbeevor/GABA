@@ -18,12 +18,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.bignerdranch.android.gaba.Model.Keys.INGREDIENTS_CARD;
 import static com.bignerdranch.android.gaba.Model.Keys.INGREDIENTS_LIST;
 import static com.bignerdranch.android.gaba.Model.Keys.NUMBER_SERVINGS;
 import static com.bignerdranch.android.gaba.Model.Keys.POSITION;
 import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_ID;
 import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_IMAGE;
 import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_NAME;
+import static com.bignerdranch.android.gaba.Model.Keys.STEPS_ID;
 import static com.bignerdranch.android.gaba.Model.Keys.STEPS_LIST;
 
 /**
@@ -40,6 +42,7 @@ public class RecipeActivity extends AppCompatActivity implements StepListAdapter
     private ArrayList<Steps> stepsList;
     private String numberServings;
     private String recipeImage;
+    private String ingredientsCard = INGREDIENTS_CARD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,12 +114,13 @@ public class RecipeActivity extends AppCompatActivity implements StepListAdapter
             });
 
         } else {
-            // we're in single-pane mode
+            // we're in single-pane mode - set onClickListener for ingredients card
             ingredientsCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                    recipeBundleForFragment.putString(INGREDIENTS_CARD, ingredientsCard);
                     intent.putExtras(recipeBundleForFragment);
                     startActivity(intent);
 
@@ -130,17 +134,18 @@ public class RecipeActivity extends AppCompatActivity implements StepListAdapter
     @Override
     public void onItemClick(List<Steps> steps, int position) {
 
+        Fragment stepDetailFragment = new StepDetailFragment();
+        Bundle stepBundleForFragment = new Bundle();
+        stepBundleForFragment.putString(RECIPE_NAME, recipeName);
+        stepBundleForFragment.putInt(POSITION, position);
+        stepBundleForFragment.putParcelableArrayList(STEPS_LIST, stepsList);
+
+        stepDetailFragment.setArguments(stepBundleForFragment);
+
         // determine if displaying one or two-panes
         if (findViewById(R.id.instruction_linear_layout) != null) {
 
             // two pane - so replace right hand fragment with recipe selected
-            Fragment stepDetailFragment = new StepDetailFragment();
-            Bundle stepBundleForFragment = new Bundle();
-            stepBundleForFragment.putInt(POSITION, position);
-            stepBundleForFragment.putParcelableArrayList(STEPS_LIST, stepsList);
-
-            stepDetailFragment.setArguments(stepBundleForFragment);
-
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.recipe_instruction_container, stepDetailFragment)
@@ -148,7 +153,11 @@ public class RecipeActivity extends AppCompatActivity implements StepListAdapter
 
         } else {
 
-            // one pane - so laun
+            // one pane - so launch new activity
+            Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+            intent.putExtras(stepBundleForFragment);
+            startActivity(intent);
+
 
         }
     }

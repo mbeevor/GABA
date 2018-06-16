@@ -66,11 +66,13 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
             Recipe recipe = recipeList.get(position);
             String recipeName = recipe.getRecipeName();
             String imageView = recipe.getRecipeImage();
+            String numberServings = recipe.getNumberServings();
 
             RecipeListAdapterViewHolder recipeListAdapterViewHolder = holder;
 
             // set recipe name
             recipeListAdapterViewHolder.recipeNameTextView.setText(recipeName);
+            recipeListAdapterViewHolder.numberServingsTextView.setText(numberServings);
 
             // check if there is an image to display, if not use default
             if (TextUtils.isEmpty(imageView)) {
@@ -108,6 +110,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
         @BindView(R.id.recipe_name_tv) public TextView recipeNameTextView;
         @BindView(R.id.recipe_name_iv) public ImageView recipeNameImageView;
+        @BindView(R.id.number_servings_tv) public TextView numberServingsTextView;
 
         public RecipeListAdapterViewHolder(final View itemView) {
             super(itemView);

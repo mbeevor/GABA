@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/GABA.iml" filepath="$PROJECT_DIR$/GABA.iml" />
-      <module fileurl="file://C:\Users\mbeev\StudioProjects\GABA\.idea\GABA.iml" filepath="C:\Users\mbeev\StudioProjects\GABA\.idea\GABA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/GABA.iml" filepath="$PROJECT_DIR$/.idea/GABA.iml" />
+      <module fileurl="file://C:\Users\mbeev\StudioProjects\GABA\GABA.iml" filepath="C:\Users\mbeev\StudioProjects\GABA\GABA.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
