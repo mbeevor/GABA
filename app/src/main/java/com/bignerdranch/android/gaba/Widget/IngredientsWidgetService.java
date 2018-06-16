@@ -2,6 +2,7 @@ package com.bignerdranch.android.gaba.Widget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -24,12 +25,12 @@ public class IngredientsWidgetService extends RemoteViewsService {
     class IngredientsRemoteViewsFactory implements RemoteViewsFactory {
 
         private Context context;
-        private String recipeName;
         private List<Ingredients> ingredientsList;
 
         public IngredientsRemoteViewsFactory(Context applicationContext, Intent intent) {
 
             context = applicationContext;
+
         }
 
 
@@ -62,12 +63,13 @@ public class IngredientsWidgetService extends RemoteViewsService {
         public RemoteViews getViewAt(int position) {
 
             Ingredients ingredients = ingredientsList.get(position);
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.list_item_ingredient);
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_list_item);
             String ingredientName = ingredients.getItemIngredient();
             String ingredientQuantity = ingredients.getItemQuantity();
             String ingredientMeasure = ingredients.getItemMeasure();
             String ingredientString = ingredientName + "" + ingredientQuantity + "" + ingredientMeasure;
-            remoteViews.setTextViewText(R.id.ingredient_tv, ingredientString);
+            Log.d("ingredient String", ingredientString);
+            remoteViews.setTextViewText(R.id.widget_list_item_tv, ingredientString);
             return remoteViews;
         }
 
@@ -90,5 +92,8 @@ public class IngredientsWidgetService extends RemoteViewsService {
         public boolean hasStableIds() {
             return false;
         }
+
     }
+
+
 }

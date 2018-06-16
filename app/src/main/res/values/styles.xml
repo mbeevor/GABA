@@ -8,6 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="widget_heading" >
+        <item name="android:textSize">28sp</item>
+        <item name="android:padding">@dimen/padding</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+    </style>
+
     <style name="recipe_heading" >
         <item name="android:textSize">28sp</item>
         <item name="android:padding">@dimen/padding</item>

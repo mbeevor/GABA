@@ -15,7 +15,7 @@
 
     <!-- widget -->
     <dimen name="widget_margin">8dp</dimen>
-    <dimen name="widget_height">40dp</dimen>
-    <dimen name="widget_width">40dp</dimen>
+    <dimen name="widget_height">294dp</dimen>
+    <dimen name="widget_width">294dp</dimen>
 
 </resources>

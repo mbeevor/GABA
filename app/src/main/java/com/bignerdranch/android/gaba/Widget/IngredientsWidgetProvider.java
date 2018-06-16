@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.widget.RemoteViews;
 
 import com.bignerdranch.android.gaba.DetailActivity;
+import com.bignerdranch.android.gaba.MainActivity;
 import com.bignerdranch.android.gaba.Model.Ingredients;
 import com.bignerdranch.android.gaba.Model.Steps;
 import com.bignerdranch.android.gaba.R;
@@ -32,7 +33,6 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        super.onReceive(context, intent);
 
         final String action = intent.getAction();
 
@@ -45,36 +45,41 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
             ComponentName widget = new ComponentName(context.getApplicationContext(), IngredientsWidgetProvider.class);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(widget);
             onUpdate(context, appWidgetManager, appWidgetIds);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetManager.getAppWidgetIds(widget), R.id.widget_listview);
 
         }
 
+        super.onReceive(context, intent);
     }
 
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
         // Perform this loop procedure for each App Widget that belongs to this provider
         for (int appWidgetId : appWidgetIds) {
-            RemoteViews views = new RemoteViews(
-                    context.getPackageName(),
-                    R.layout.ingredients_widget
-            );
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
+
+            Intent mainIntent = new Intent(context, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, 0);
+            views.setOnClickPendingIntent(R.id.widget_heading, pendingIntent);
 
             if (recipeName != null) {
+                Intent intent = new Intent(context, IngredientsWidgetService.class);
+                views.setRemoteAdapter(R.id.widget_listview, intent);
+                views.setTextViewText(R.id.widget_title_tv, recipeName);
+
                 Intent detailIntent = new Intent(context, DetailActivity.class);
                 Bundle extras = new Bundle();
                 extras.putString(RECIPE_NAME, recipeName);
                 extras.putParcelableArrayList(INGREDIENTS_LIST, ingredientsList);
                 extras.putParcelableArrayList(STEPS_LIST, stepsList);
                 detailIntent.putExtras(extras);
-                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent newPendingIntent = PendingIntent.getActivity(context, 0, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-
-                Intent intent = new Intent(context, IngredientsWidgetService.class);
-                views.setRemoteAdapter(R.id.widget_listview, intent);
-                views.setTextViewText(R.id.widget_title_tv, recipeName);
-                views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
+                views.setOnClickPendingIntent(R.id.widget_layout, newPendingIntent);
                 appWidgetManager.updateAppWidget(appWidgetId, views);
+
             }
+
         }
     }
 
