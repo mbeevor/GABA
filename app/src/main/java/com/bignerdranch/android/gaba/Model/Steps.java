@@ -3,23 +3,17 @@ package com.bignerdranch.android.gaba.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Created by Matthew on 03/06/2018.
  */
 
 public class Steps implements Parcelable {
 
-    @SerializedName("id")
+
     private String stepId;
-    @SerializedName("shortDescription")
     private String shortDescription;
-    @SerializedName("description")
     private String longDescription;
-    @SerializedName("videoURL")
     private String videoUrl;
-    @SerializedName("thumbnailURL")
     private String thumbnailUrl;
 
 
