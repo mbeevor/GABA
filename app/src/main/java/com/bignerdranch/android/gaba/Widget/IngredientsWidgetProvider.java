@@ -10,13 +10,13 @@ import android.os.Bundle;
 import android.widget.RemoteViews;
 
 import com.bignerdranch.android.gaba.DetailActivity;
-import com.bignerdranch.android.gaba.MainActivity;
 import com.bignerdranch.android.gaba.Model.Ingredients;
 import com.bignerdranch.android.gaba.Model.Steps;
 import com.bignerdranch.android.gaba.R;
 
 import java.util.ArrayList;
 
+import static com.bignerdranch.android.gaba.Model.Keys.ACTION_UPDATE_WIDGET;
 import static com.bignerdranch.android.gaba.Model.Keys.INGREDIENTS_LIST;
 import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_NAME;
 import static com.bignerdranch.android.gaba.Model.Keys.STEPS_LIST;
@@ -36,7 +36,7 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
 
         final String action = intent.getAction();
 
-        if (action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
+        if (action.equals(ACTION_UPDATE_WIDGET)) {
 
             recipeName = intent.getStringExtra(RECIPE_NAME);
             ingredientsList = intent.getParcelableArrayListExtra(INGREDIENTS_LIST);
@@ -54,34 +54,38 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
 
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
-        // Perform this loop procedure for each App Widget that belongs to this provider
+        IngredientsWidgetService.updateWidgetIntent(context, recipeName, ingredientsList, stepsList);
+    }
+
+    public static void updateWidgets(Context context, AppWidgetManager appWidgetManager, String name, ArrayList ingredients, ArrayList steps, int[] appWidgetIds) {
+
         for (int appWidgetId : appWidgetIds) {
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
-
-            Intent mainIntent = new Intent(context, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, 0);
-            views.setOnClickPendingIntent(R.id.widget_heading, pendingIntent);
-
-            if (recipeName != null) {
-                Intent intent = new Intent(context, IngredientsWidgetService.class);
-                views.setRemoteAdapter(R.id.widget_listview, intent);
-                views.setTextViewText(R.id.widget_title_tv, recipeName);
-
-                Intent detailIntent = new Intent(context, DetailActivity.class);
-                Bundle extras = new Bundle();
-                extras.putString(RECIPE_NAME, recipeName);
-                extras.putParcelableArrayList(INGREDIENTS_LIST, ingredientsList);
-                extras.putParcelableArrayList(STEPS_LIST, stepsList);
-                detailIntent.putExtras(extras);
-                PendingIntent newPendingIntent = PendingIntent.getActivity(context, 0, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                views.setOnClickPendingIntent(R.id.widget_layout, newPendingIntent);
-                appWidgetManager.updateAppWidget(appWidgetId, views);
-
-            }
+            updateAppWidget(context, appWidgetManager, name, ingredients, steps, appWidgetId);
 
         }
     }
+
+    private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+                                        String name, ArrayList ingredients, ArrayList steps, int appWidgetId) {
+
+
+        Intent detailIntent = new Intent(context, DetailActivity.class);
+        Bundle extras = new Bundle();
+        extras.putString(RECIPE_NAME, name);
+        extras.putParcelableArrayList(INGREDIENTS_LIST, ingredients);
+        extras.putParcelableArrayList(STEPS_LIST, steps);
+        detailIntent.putExtras(extras);
+
+        PendingIntent newPendingIntent = PendingIntent.getActivity(context, 0, detailIntent, 0);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
+        views.setTextViewText(R.id.widget_title_tv, name);
+        // TODO: add listview?
+        views.setOnClickPendingIntent(R.id.widget_layout, newPendingIntent);
+        appWidgetManager.updateAppWidget(appWidgetId, views);
+
+    }
+
+
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {

@@ -49,10 +49,8 @@
                 android:resource="@xml/ingredients_widget_info"/>
         </receiver>
 
-        <service
-            android:name=".Widget.IngredientsWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS">
-        </service>
+        <service android:name=".Widget.IngredientsWidgetService"
+                 />
 
     </application>
 
