@@ -74,7 +74,7 @@ public class IngredientsWidgetService extends RemoteViewsService {
 
         @Override
         public int getViewTypeCount() {
-            return 0;
+            return 1;
         }
 
         @Override
@@ -93,7 +93,13 @@ public class IngredientsWidgetService extends RemoteViewsService {
         if (RecipesPreferences.getRecipePreferences(context) != null) {
             ingredients.clear();
             for (Ingredients ingredientsItem : RecipesPreferences.getRecipePreferences(context).getIngredientsList()) {
-                ingredients.add(String.valueOf(ingredientsItem.getItemIngredient()));
+
+                String ingredient = String.valueOf(ingredientsItem.getItemIngredient());
+                String quantity = String.valueOf(ingredientsItem.getItemQuantity());
+                String measure = String.valueOf(ingredientsItem.getItemMeasure());
+                String ingredientString = ingredient + "" + quantity + "" + measure;
+
+                ingredients.add(ingredientString);
             }
         } else {
             ingredients = null;
