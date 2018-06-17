@@ -6,10 +6,11 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.bignerdranch.android.gaba.Model.Ingredients;
-import com.bignerdranch.android.gaba.Model.Steps;
+import com.bignerdranch.android.gaba.Model.RecipesPreferences;
 import com.bignerdranch.android.gaba.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Matthew on 16/06/2018.
@@ -19,9 +20,7 @@ import java.util.ArrayList;
 public class IngredientsWidgetService extends RemoteViewsService {
 
     private Context context;
-    private String recipeName;
-    private ArrayList<Ingredients> ingredientsList;
-    private ArrayList<Steps> stepsList;
+    private List<String> ingredients;
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
@@ -29,7 +28,11 @@ public class IngredientsWidgetService extends RemoteViewsService {
     }
 
     private class IngredientsListViewRemoteViewsFactory implements RemoteViewsFactory {
-        public IngredientsListViewRemoteViewsFactory(Context applicationContext) {
+        
+        IngredientsListViewRemoteViewsFactory(Context applicationContext) {
+            
+            context = applicationContext;
+            ingredients = new ArrayList<>();
         }
 
         @Override
@@ -39,7 +42,7 @@ public class IngredientsWidgetService extends RemoteViewsService {
 
         @Override
         public void onDataSetChanged() {
-
+            loadIngredients();
         }
 
         @Override
@@ -49,24 +52,17 @@ public class IngredientsWidgetService extends RemoteViewsService {
 
         @Override
         public int getCount() {
-            if (ingredientsList != null) return ingredientsList.size();
+            if (ingredients != null) return ingredients.size();
             else return 0;
         }
 
         @Override
         public RemoteViews getViewAt(int position) {
-            if (ingredientsList == null) {
+            if (ingredients == null) {
                 return null;
             } else {
                 RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_list_item);
-                Ingredients ingredients = ingredientsList.get(position);
-
-                String ingredientName = ingredients.getItemIngredient();
-                String ingredientQuantity = ingredients.getItemQuantity();
-                String ingredientMeasure = ingredients.getItemMeasure();
-                String ingredientString = ingredientName + "" + ingredientQuantity + "" + ingredientMeasure;
-
-                remoteViews.setTextViewText(R.id.widget_list_item_tv, ingredientString);
+                remoteViews.setTextViewText(R.id.widget_list_item_tv, ingredients.get(position));
                 return remoteViews;
             }
         }
@@ -90,6 +86,19 @@ public class IngredientsWidgetService extends RemoteViewsService {
         public boolean hasStableIds() {
             return false;
         }
+    }
+
+    private void loadIngredients() {
+
+        if (RecipesPreferences.getRecipePreferences(context) != null) {
+            ingredients.clear();
+            for (Ingredients ingredientsItem : RecipesPreferences.getRecipePreferences(context).getIngredientsList()) {
+                ingredients.add(String.valueOf(ingredientsItem.getItemIngredient()));
+            }
+        } else {
+            ingredients = null;
+        }
+
     }
 }
 

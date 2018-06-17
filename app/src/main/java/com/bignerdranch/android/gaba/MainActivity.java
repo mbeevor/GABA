@@ -1,6 +1,5 @@
 package com.bignerdranch.android.gaba;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,8 +8,8 @@ import com.bignerdranch.android.gaba.Adapters.RecipeListAdapter;
 import com.bignerdranch.android.gaba.Model.Ingredients;
 import com.bignerdranch.android.gaba.Model.Keys;
 import com.bignerdranch.android.gaba.Model.Recipe;
+import com.bignerdranch.android.gaba.Model.RecipesPreferences;
 import com.bignerdranch.android.gaba.Model.Steps;
-import com.bignerdranch.android.gaba.Widget.IngredientsWidgetProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,24 +45,23 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
         numberServings = recipeSelected.getNumberServings();
         recipeImage = recipeSelected.getRecipeImage();
 
-        Bundle recipe = new Bundle();
-        recipe.putString(Keys.RECIPE_ID, recipeId);
-        recipe.putString(Keys.RECIPE_NAME, recipeName);
-        recipe.putParcelableArrayList(Keys.INGREDIENTS_LIST, ingredientsList);
-        recipe.putParcelableArrayList(Keys.STEPS_LIST, stepsList);
-        recipe.putString(Keys.NUMBER_SERVINGS, numberServings);
-        recipe.putString(Keys.RECIPE_IMAGE, recipeImage);
+        Bundle recipeBundle = new Bundle();
+        recipeBundle.putString(Keys.RECIPE_ID, recipeId);
+        recipeBundle.putString(Keys.RECIPE_NAME, recipeName);
+        recipeBundle.putParcelableArrayList(Keys.INGREDIENTS_LIST, ingredientsList);
+        recipeBundle.putParcelableArrayList(Keys.STEPS_LIST, stepsList);
+        recipeBundle.putString(Keys.NUMBER_SERVINGS, numberServings);
+        recipeBundle.putString(Keys.RECIPE_IMAGE, recipeImage);
 
         // send recipe to RecipeActivity via intent
         final Intent intent = new Intent(this, RecipeActivity.class);
-        intent.putExtras(recipe);
+        intent.putExtras(recipeBundle);
         this.startActivity(intent);
 
-        // send broadcast to update widget to ingredients for recipe selected
-        final Intent widgetIntent = new Intent(Keys.ACTION_UPDATE_WIDGET);
-        widgetIntent.setComponent(new ComponentName(this, IngredientsWidgetProvider.class));
-        widgetIntent.putExtras(recipe);
-        sendBroadcast(widgetIntent);
+        // add recipe to Shared Preferences
+        Recipe recipe = new Recipe(recipeId, recipeName, ingredientsList,
+                stepsList, numberServings, recipeImage);
+        RecipesPreferences.setRecipePreferences(this, recipe, getApplication());
 
     }
 }

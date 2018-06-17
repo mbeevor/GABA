@@ -3,22 +3,14 @@ package com.bignerdranch.android.gaba.Widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.bignerdranch.android.gaba.MainActivity;
-import com.bignerdranch.android.gaba.Model.Ingredients;
-import com.bignerdranch.android.gaba.Model.Steps;
+import com.bignerdranch.android.gaba.Model.Recipe;
+import com.bignerdranch.android.gaba.Model.RecipesPreferences;
 import com.bignerdranch.android.gaba.R;
-
-import java.util.ArrayList;
-
-import static com.bignerdranch.android.gaba.Model.Keys.ACTION_UPDATE_WIDGET;
-import static com.bignerdranch.android.gaba.Model.Keys.INGREDIENTS_LIST;
-import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_NAME;
-import static com.bignerdranch.android.gaba.Model.Keys.STEPS_LIST;
 
 /**
  * Created by Matthew on 16/06/2018.
@@ -26,61 +18,37 @@ import static com.bignerdranch.android.gaba.Model.Keys.STEPS_LIST;
 
 public class IngredientsWidgetProvider extends AppWidgetProvider {
 
-    private String recipeName;
-    private ArrayList<Ingredients> ingredientsList;
-    private ArrayList<Steps> stepsList;
+    private Recipe recipe;
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+                                int appWidgetId) {
 
-        final String action = intent.getAction();
+        // Construct the RemoteViews object
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
 
-        if (action.equals(ACTION_UPDATE_WIDGET)) {
+        // open Main Activity if widget clicked
+        Intent detailIntent = new Intent(context, MainActivity.class);
+        PendingIntent newPendingIntent = PendingIntent.getActivity(context, 0, detailIntent, 0);
+        views.setOnClickPendingIntent(R.id.widget_layout, newPendingIntent);
 
-            recipeName = intent.getStringExtra(RECIPE_NAME);
-            ingredientsList = intent.getParcelableArrayListExtra(INGREDIENTS_LIST);
-            stepsList = intent.getParcelableArrayListExtra(STEPS_LIST);
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context.getApplicationContext());
-            ComponentName widget = new ComponentName(context.getApplicationContext(), IngredientsWidgetProvider.class);
-            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(widget);
-            onUpdate(context, appWidgetManager, appWidgetIds);
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetManager.getAppWidgetIds(widget), R.id.widget_listview);
+        if (RecipesPreferences.getRecipePreferences(context) == null) {
+            views.setTextViewText(R.id.widget_title_tv, "No recipe selected");
+        } else {
+            views.setTextViewText(R.id.widget_title_tv, RecipesPreferences.getRecipePreferences(context).getRecipeName());
 
+            Intent intent = new Intent(context, IngredientsWidgetService.class);
+            views.setRemoteAdapter(R.id.widget_listview, intent);
         }
-
-        super.onReceive(context, intent);
+        // Instruct the widget manager to update the widget
+        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-
-        updateWidgets(context, appWidgetManager, recipeName, ingredientsList, stepsList, appWidgetIds);
-    }
-
-    public static void updateWidgets(Context context, AppWidgetManager appWidgetManager, String name, ArrayList ingredients, ArrayList steps, int[] appWidgetIds) {
-
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, name, ingredients, steps, appWidgetId);
 
+            updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
-
-    private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                        String name, ArrayList ingredients, ArrayList steps, int appWidgetId) {
-
-
-        // open MainActivity when clicking the widget
-        Intent detailIntent = new Intent(context, MainActivity.class);
-
-        PendingIntent newPendingIntent = PendingIntent.getActivity(context, 0, detailIntent, 0);
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
-        views.setTextViewText(R.id.widget_title_tv, name);
-
-        views.setOnClickPendingIntent(R.id.widget_layout, newPendingIntent);
-        appWidgetManager.updateAppWidget(appWidgetId, views);
-
-    }
-
-
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
