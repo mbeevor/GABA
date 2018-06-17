@@ -6,10 +6,9 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.widget.RemoteViews;
 
-import com.bignerdranch.android.gaba.DetailActivity;
+import com.bignerdranch.android.gaba.MainActivity;
 import com.bignerdranch.android.gaba.Model.Ingredients;
 import com.bignerdranch.android.gaba.Model.Steps;
 import com.bignerdranch.android.gaba.R;
@@ -54,7 +53,7 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
 
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
-        IngredientsWidgetService.updateWidgetIntent(context, recipeName, ingredientsList, stepsList);
+        updateWidgets(context, appWidgetManager, recipeName, ingredientsList, stepsList, appWidgetIds);
     }
 
     public static void updateWidgets(Context context, AppWidgetManager appWidgetManager, String name, ArrayList ingredients, ArrayList steps, int[] appWidgetIds) {
@@ -69,17 +68,13 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
                                         String name, ArrayList ingredients, ArrayList steps, int appWidgetId) {
 
 
-        Intent detailIntent = new Intent(context, DetailActivity.class);
-        Bundle extras = new Bundle();
-        extras.putString(RECIPE_NAME, name);
-        extras.putParcelableArrayList(INGREDIENTS_LIST, ingredients);
-        extras.putParcelableArrayList(STEPS_LIST, steps);
-        detailIntent.putExtras(extras);
+        // open MainActivity when clicking the widget
+        Intent detailIntent = new Intent(context, MainActivity.class);
 
         PendingIntent newPendingIntent = PendingIntent.getActivity(context, 0, detailIntent, 0);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
         views.setTextViewText(R.id.widget_title_tv, name);
-        // TODO: add listview?
+
         views.setOnClickPendingIntent(R.id.widget_layout, newPendingIntent);
         appWidgetManager.updateAppWidget(appWidgetId, views);
 

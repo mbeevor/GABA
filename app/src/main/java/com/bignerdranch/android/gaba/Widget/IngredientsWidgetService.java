@@ -1,19 +1,16 @@
 package com.bignerdranch.android.gaba.Widget;
 
-import android.app.IntentService;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
+import android.widget.RemoteViews;
+import android.widget.RemoteViewsService;
 
 import com.bignerdranch.android.gaba.Model.Ingredients;
 import com.bignerdranch.android.gaba.Model.Steps;
+import com.bignerdranch.android.gaba.R;
 
 import java.util.ArrayList;
 
-import static android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE;
-import static com.bignerdranch.android.gaba.Model.Keys.ACTION_UPDATE_WIDGET;
 import static com.bignerdranch.android.gaba.Model.Keys.INGREDIENTS_LIST;
 import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_NAME;
 import static com.bignerdranch.android.gaba.Model.Keys.STEPS_LIST;
@@ -23,47 +20,94 @@ import static com.bignerdranch.android.gaba.Model.Keys.STEPS_LIST;
  */
 
 
+public class IngredientsWidgetService implements RemoteViewsService.RemoteViewsFactory {
 
-public class IngredientsWidgetService extends IntentService {
-
+    private Context context;
     private String recipeName;
     private ArrayList<Ingredients> ingredientsList;
     private ArrayList<Steps> stepsList;
 
-    public IngredientsWidgetService() {
-        super("IngredientsWidgetService");
+    IngredientsWidgetService(Context applicationContext, Intent intent) {
+        context = applicationContext;
+        recipeName = intent.getStringExtra(RECIPE_NAME);
+        ingredientsList = intent.getParcelableArrayListExtra(INGREDIENTS_LIST);
+        stepsList = intent.getParcelableArrayListExtra(STEPS_LIST);
+        loadIngredients();
     }
 
-    public static void updateWidgetIntent(Context context, String name, ArrayList ingredients, ArrayList steps) {
+    public class IngredientsViewsService extends RemoteViewsService {
 
-        Intent intent = new Intent(context, IngredientsWidgetService.class);
-        intent.setAction(ACTION_UPDATE_WIDGET);
-        intent.putExtra(RECIPE_NAME, name);
-        intent.putExtra(INGREDIENTS_LIST, ingredients);
-        intent.putExtra(STEPS_LIST, steps);
-        context.startService(intent);
-    }
+        @Override
+        public RemoteViewsFactory onGetViewFactory(Intent intent) {
 
-    @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
-        if (intent != null) {
-            final String action = intent.getAction();
-            if (ACTION_APPWIDGET_UPDATE.equals(action)) {
-                recipeName = intent.getStringExtra(RECIPE_NAME);
-                ingredientsList = intent.getParcelableArrayListExtra(INGREDIENTS_LIST);
-                stepsList = intent.getParcelableArrayListExtra(STEPS_LIST);
-                handleActionUpdateWidget();
-            }
+            return new IngredientsWidgetService(this.getApplicationContext(), intent);
         }
     }
 
-    private void handleActionUpdateWidget() {
+    private void loadIngredients() {
 
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        ComponentName widget = new ComponentName(this, IngredientsWidgetProvider.class);
-        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(widget);
-        IngredientsWidgetProvider.updateWidgets(this, appWidgetManager, recipeName,
-                ingredientsList, stepsList, appWidgetIds);
 
+    }
+
+    @Override
+    public void onCreate() {
+
+    }
+
+    @Override
+    public void onDataSetChanged() {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        if (ingredientsList != null) {
+            ingredientsList = null;
+        }
+    }
+
+
+    @Override
+    public int getCount() {
+        if (ingredientsList != null) return ingredientsList.size();
+        else return 0;
+    }
+
+    @Override
+    public RemoteViews getViewAt(int position) {
+        if (ingredientsList == null) {
+            return null;
+        } else {
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_list_item);
+            Ingredients ingredients = ingredientsList.get(position);
+
+            String ingredientName = ingredients.getItemIngredient();
+            String ingredientQuantity = ingredients.getItemQuantity();
+            String ingredientMeasure = ingredients.getItemMeasure();
+            String ingredientString = ingredientName + "" + ingredientQuantity + "" + ingredientMeasure;
+
+            remoteViews.setTextViewText(R.id.widget_list_item_tv, ingredientString);
+            return remoteViews;
+        }
+    }
+
+    @Override
+    public RemoteViews getLoadingView() {
+        return null;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 0;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
     }
 }
