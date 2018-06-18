@@ -6,7 +6,7 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.bignerdranch.android.gaba.Model.Ingredients;
-import com.bignerdranch.android.gaba.Model.RecipesPreferences;
+import com.bignerdranch.android.gaba.Model.SharedPreferences;
 import com.bignerdranch.android.gaba.R;
 
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ import java.util.List;
 public class IngredientsWidgetService extends RemoteViewsService {
 
     private Context context;
+    private ArrayList<Ingredients> ingredientsList;
     private List<String> ingredients;
 
     @Override
@@ -37,7 +38,7 @@ public class IngredientsWidgetService extends RemoteViewsService {
 
         @Override
         public void onCreate() {
-
+            loadIngredients();
         }
 
         @Override
@@ -47,13 +48,18 @@ public class IngredientsWidgetService extends RemoteViewsService {
 
         @Override
         public void onDestroy() {
-
+            if (ingredients != null) {
+                ingredients = null;
+            }
         }
 
         @Override
         public int getCount() {
-            if (ingredients != null) return ingredients.size();
-            else return 0;
+            if (ingredients != null) {
+                return ingredients.size();
+            } else {
+                return 0;
+            }
         }
 
         @Override
@@ -84,25 +90,25 @@ public class IngredientsWidgetService extends RemoteViewsService {
 
         @Override
         public boolean hasStableIds() {
-            return false;
+            return true;
         }
     }
 
     private void loadIngredients() {
 
-        if (RecipesPreferences.getRecipePreferences(context) != null) {
-            ingredients.clear();
-            for (Ingredients ingredientsItem : RecipesPreferences.getRecipePreferences(context).getIngredientsList()) {
+        if (SharedPreferences.getSharedPreferences(context) != null) {
 
-                String ingredient = String.valueOf(ingredientsItem.getItemIngredient());
-                String quantity = String.valueOf(ingredientsItem.getItemQuantity());
-                String measure = String.valueOf(ingredientsItem.getItemMeasure());
-                String ingredientString = ingredient + "" + quantity + "" + measure;
+            ingredientsList = SharedPreferences.getSharedPreferences(context).getIngredientsList();
+
+            for (Ingredients i : ingredientsList) {
+
+                String ingredient = i.getItemIngredient();
+                String quantity = i.getItemQuantity();
+                String measure = i.getItemMeasure();
+                String ingredientString = quantity + " " + measure + " " + ingredient;
 
                 ingredients.add(ingredientString);
             }
-        } else {
-            ingredients = null;
         }
 
     }

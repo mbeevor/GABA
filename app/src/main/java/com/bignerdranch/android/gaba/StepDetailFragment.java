@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -93,6 +92,12 @@ public class StepDetailFragment extends Fragment {
         releasePlayer();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
+    }
+
     // method to initialise player
     private void initializePlayer(Uri mediaUri) {
         if (simpleExoPlayer == null) {
@@ -113,10 +118,9 @@ public class StepDetailFragment extends Fragment {
             // fill screen if device is rotated
             if (getActivity().getResources().getConfiguration().orientation ==
                     Configuration.ORIENTATION_LANDSCAPE) {
-                ViewGroup.LayoutParams params = (ConstraintLayout.LayoutParams)
-                        playerView.getLayoutParams();
-                params.width = params.MATCH_PARENT;
-                params.height = params.MATCH_PARENT;
+                ViewGroup.LayoutParams params = playerView.getLayoutParams();
+                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                params.height = ViewGroup.LayoutParams.MATCH_PARENT;
                 playerView.setLayoutParams(params);
                 ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 

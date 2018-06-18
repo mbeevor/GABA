@@ -16,10 +16,6 @@ import com.bignerdranch.android.gaba.Model.Steps;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bignerdranch.android.gaba.Model.Keys.NUMBER_SERVINGS;
-import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_ID;
-import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_IMAGE;
-import static com.bignerdranch.android.gaba.Model.Keys.RECIPE_NAME;
 import static com.bignerdranch.android.gaba.Model.Keys.STEPS_LIST;
 
 /**

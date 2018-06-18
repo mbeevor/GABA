@@ -10,6 +10,8 @@ import android.view.View;
 
 import com.bignerdranch.android.gaba.Adapters.StepListAdapter;
 import com.bignerdranch.android.gaba.Model.Ingredients;
+import com.bignerdranch.android.gaba.Model.Recipe;
+import com.bignerdranch.android.gaba.Model.SharedPreferences;
 import com.bignerdranch.android.gaba.Model.Steps;
 
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ import static com.bignerdranch.android.gaba.Model.Keys.STEPS_LIST;
 
 public class RecipeActivity extends AppCompatActivity implements StepListAdapter.OnStepClickHandler {
 
+    private Recipe recipe;
     private String recipeId;
     private String recipeName;
     private ArrayList<Ingredients> ingredientsList;
@@ -49,14 +52,15 @@ public class RecipeActivity extends AppCompatActivity implements StepListAdapter
         setContentView(R.layout.activity_recipe);
         ButterKnife.bind(this);
 
-        // get intent from main activity
-        Intent intent = getIntent();
-        recipeId = intent.getStringExtra(RECIPE_ID);
-        recipeName = intent.getStringExtra(RECIPE_NAME);
-        ingredientsList = intent.getParcelableArrayListExtra(INGREDIENTS_LIST);
-        stepsList = intent.getParcelableArrayListExtra(STEPS_LIST);
-        numberServings = intent.getStringExtra(NUMBER_SERVINGS);
-        recipeImage = intent.getStringExtra(RECIPE_IMAGE);
+        // get recipe from Shared Preferences
+        recipe = SharedPreferences.getSharedPreferences(this);
+
+        recipeId = recipe.getRecipeId();
+        recipeName = recipe.getRecipeName();
+        ingredientsList = recipe.getIngredientsList();
+        stepsList = recipe.getStepsList();
+        numberServings = recipe.getNumberServings();
+        recipeImage = recipe.getRecipeImage();
 
         // update app name to name of recipe selected
         setTitle(recipeName);
@@ -153,7 +157,7 @@ public class RecipeActivity extends AppCompatActivity implements StepListAdapter
         } else {
 
             // one pane - so launch new activity
-            Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+            Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtras(stepBundleForFragment);
             startActivity(intent);
 

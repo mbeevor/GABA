@@ -1,14 +1,17 @@
 package com.bignerdranch.android.gaba;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 
 import com.bignerdranch.android.gaba.Adapters.RecipeListAdapter;
+import com.bignerdranch.android.gaba.IdlingResource.SimpleIdlingResource;
 import com.bignerdranch.android.gaba.Model.Ingredients;
-import com.bignerdranch.android.gaba.Model.Keys;
 import com.bignerdranch.android.gaba.Model.Recipe;
-import com.bignerdranch.android.gaba.Model.RecipesPreferences;
+import com.bignerdranch.android.gaba.Model.SharedPreferences;
 import com.bignerdranch.android.gaba.Model.Steps;
 
 import java.util.ArrayList;
@@ -25,12 +28,16 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
     private String numberServings;
     private String recipeImage;
 
+    @Nullable
+    private IdlingResource idlingResource;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle(R.string.long_app_name);
-
+        getIdlingResource();
 
     }
 
@@ -45,23 +52,20 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
         numberServings = recipeSelected.getNumberServings();
         recipeImage = recipeSelected.getRecipeImage();
 
-        Bundle recipeBundle = new Bundle();
-        recipeBundle.putString(Keys.RECIPE_ID, recipeId);
-        recipeBundle.putString(Keys.RECIPE_NAME, recipeName);
-        recipeBundle.putParcelableArrayList(Keys.INGREDIENTS_LIST, ingredientsList);
-        recipeBundle.putParcelableArrayList(Keys.STEPS_LIST, stepsList);
-        recipeBundle.putString(Keys.NUMBER_SERVINGS, numberServings);
-        recipeBundle.putString(Keys.RECIPE_IMAGE, recipeImage);
-
-        // send recipe to RecipeActivity via intent
-        final Intent intent = new Intent(this, RecipeActivity.class);
-        intent.putExtras(recipeBundle);
-        this.startActivity(intent);
-
         // add recipe to Shared Preferences
         Recipe recipe = new Recipe(recipeId, recipeName, ingredientsList,
                 stepsList, numberServings, recipeImage);
-        RecipesPreferences.setRecipePreferences(this, recipe, getApplication());
+        SharedPreferences.setSharedPreferences(this, recipe, getApplication());
 
+    }
+
+
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (idlingResource == null) {
+            idlingResource = new SimpleIdlingResource();
+        }
+        return idlingResource;
     }
 }

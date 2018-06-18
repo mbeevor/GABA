@@ -2,6 +2,7 @@ package com.bignerdranch.android.gaba;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -165,5 +166,12 @@ public class DetailActivity extends AppCompatActivity {
         outState.putParcelableArrayList(STEPS_LIST, stepsList);
         outState.putString(INGREDIENTS_CARD, ingredientsCard);
         outState.putParcelableArrayList(INGREDIENTS_LIST, ingredientsList);
+    }
+
+    @VisibleForTesting
+    static Intent createResultData(String recipe) {
+        final Intent resultData = new Intent();
+        resultData.putExtra(RECIPE_NAME, recipe);
+        return resultData;
     }
 }

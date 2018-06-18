@@ -6,6 +6,7 @@ package com.bignerdranch.android.gaba.Model;
 
 public class Keys {
 
+    public static final String RECIPE = "recipe";
     public static final String ID = "id";
     public static final String POSITION = "position";
     public static final String RECIPE_ID = "recipeId";

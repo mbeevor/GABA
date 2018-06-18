@@ -96,7 +96,6 @@ public class MainListFragment extends Fragment {
         new GetRecipeListDataTask(new GetRecipeDataListener())
                 .execute(getRecipeListUrl);
 
-
     }
 
 
