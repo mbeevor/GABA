@@ -10,7 +10,6 @@ import com.bignerdranch.android.gaba.Model.SharedPreferences;
 import com.bignerdranch.android.gaba.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Matthew on 16/06/2018.
@@ -21,7 +20,7 @@ public class IngredientsWidgetService extends RemoteViewsService {
 
     private Context context;
     private ArrayList<Ingredients> ingredientsList;
-    private List<String> ingredients;
+    private ArrayList<String> ingredients;
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
@@ -29,9 +28,9 @@ public class IngredientsWidgetService extends RemoteViewsService {
     }
 
     private class IngredientsListViewRemoteViewsFactory implements RemoteViewsFactory {
-        
+
         IngredientsListViewRemoteViewsFactory(Context applicationContext) {
-            
+
             context = applicationContext;
             ingredients = new ArrayList<>();
         }
@@ -49,7 +48,7 @@ public class IngredientsWidgetService extends RemoteViewsService {
         @Override
         public void onDestroy() {
             if (ingredients != null) {
-                ingredients = null;
+                ingredients.clear();
             }
         }
 
@@ -64,13 +63,11 @@ public class IngredientsWidgetService extends RemoteViewsService {
 
         @Override
         public RemoteViews getViewAt(int position) {
-            if (ingredients == null) {
-                return null;
-            } else {
-                RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_list_item);
-                remoteViews.setTextViewText(R.id.widget_list_item_tv, ingredients.get(position));
-                return remoteViews;
-            }
+
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_list_item);
+            remoteViews.setTextViewText(R.id.widget_list_item_tv, ingredients.get(position));
+            return remoteViews;
+
         }
 
         @Override
@@ -85,12 +82,12 @@ public class IngredientsWidgetService extends RemoteViewsService {
 
         @Override
         public long getItemId(int i) {
-            return 0;
+            return i;
         }
 
         @Override
         public boolean hasStableIds() {
-            return true;
+            return false;
         }
     }
 
