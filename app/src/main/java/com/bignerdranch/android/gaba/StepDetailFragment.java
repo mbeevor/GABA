@@ -107,10 +107,6 @@ public class StepDetailFragment extends Fragment {
             Bundle recipeBundleForFragment = getArguments();
                 stepsList = recipeBundleForFragment.getParcelableArrayList(STEPS_LIST);
                 position = recipeBundleForFragment.getInt(POSITION);
-                playerPosition = null;
-                currentWindow = 0;
-                playWhenReady = false;
-
         }
 
         View rootView = inflater.inflate(R.layout.fragment_step_list, container, false);
@@ -143,11 +139,11 @@ public class StepDetailFragment extends Fragment {
         } else {
             thumbnailImage.setVisibility(View.GONE);
             playerView.setVisibility(View.VISIBLE);
+            componentListener = new ComponentListener();
             initializeMediaSession();
             initializePlayer();
         }
 
-        componentListener = new ComponentListener();
         return rootView;
 
     }
@@ -164,6 +160,9 @@ public class StepDetailFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         if (simpleExoPlayer != null) {
+            playerPosition = simpleExoPlayer.getCurrentPosition();
+            currentWindow = simpleExoPlayer.getCurrentWindowIndex();
+            playWhenReady = simpleExoPlayer.getPlayWhenReady();
             releasePlayer();
             mediaSession.setActive(false);
         }
@@ -173,6 +172,9 @@ public class StepDetailFragment extends Fragment {
     public void onPause() {
         super.onPause();
         if (Util.SDK_INT <= 23) {
+            playerPosition = simpleExoPlayer.getCurrentPosition();
+            currentWindow = simpleExoPlayer.getCurrentWindowIndex();
+            playWhenReady = simpleExoPlayer.getPlayWhenReady();
             releasePlayer();
         }
     }
@@ -190,6 +192,9 @@ public class StepDetailFragment extends Fragment {
     public void onStop() {
         super.onStop();
         if (Util.SDK_INT > 23) {
+            playerPosition = simpleExoPlayer.getCurrentPosition();
+            currentWindow = simpleExoPlayer.getCurrentWindowIndex();
+            playWhenReady = simpleExoPlayer.getPlayWhenReady();
             releasePlayer();
         }
     }
