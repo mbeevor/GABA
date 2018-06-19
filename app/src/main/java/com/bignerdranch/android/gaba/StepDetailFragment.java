@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.bignerdranch.android.gaba.Model.Keys.PLAYER_POSITION;
 import static com.bignerdranch.android.gaba.Model.Keys.POSITION;
 import static com.bignerdranch.android.gaba.Model.Keys.STEPS_LIST;
 
@@ -42,8 +44,12 @@ public class StepDetailFragment extends Fragment {
 
     public int position;
     private ArrayList<Steps> stepsList;
-    @BindView(R.id.player_view) public SimpleExoPlayerView playerView;
+    @BindView(R.id.player_view)
+    public SimpleExoPlayerView playerView;
     private SimpleExoPlayer simpleExoPlayer;
+    private Long playerPosition;
+    private boolean getPlayerWhenReady;
+    private String videoUrl;
 
     public StepDetailFragment() {
         // Required empty public constructor
@@ -55,13 +61,29 @@ public class StepDetailFragment extends Fragment {
 
     }
 
+    // save data on rotation
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putParcelableArrayList(STEPS_LIST, stepsList);
+        savedInstanceState.putInt(POSITION, position);
+        savedInstanceState.putLong(PLAYER_POSITION, playerPosition);
+        savedInstanceState.putBoolean("state", getPlayerWhenReady);
+    }
+
+    // create view using intent
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle recipeBundleForFragment) {
-        recipeBundleForFragment = getArguments();
+                             Bundle savedInstanceState) {
+        Bundle recipeBundleForFragment = getArguments();
         if (recipeBundleForFragment != null) {
             stepsList = recipeBundleForFragment.getParcelableArrayList(STEPS_LIST);
             position = recipeBundleForFragment.getInt(POSITION);
+        } else {
+            stepsList = savedInstanceState.getParcelableArrayList(STEPS_LIST);
+            position = savedInstanceState.getInt(POSITION);
+            playerPosition = savedInstanceState.getLong(PLAYER_POSITION);
+            getPlayerWhenReady = savedInstanceState.getBoolean("state");
         }
 
         View rootView = inflater.inflate(R.layout.fragment_step_list, container, false);
@@ -73,13 +95,13 @@ public class StepDetailFragment extends Fragment {
         TextView textView = rootView.findViewById(R.id.step_tv);
         textView.setText(currentStep.getLongDescription());
 
-       String videoUrl = currentStep.getVideoUrl();
+        videoUrl = currentStep.getVideoUrl();
         // load video into media player, or hide if there isn't one
         if (TextUtils.isEmpty(videoUrl)) {
             playerView.setVisibility(View.GONE);
         } else {
-            Uri mediaUri = Uri.parse(videoUrl);
-            initializePlayer(mediaUri);
+            playerView.setVisibility(View.VISIBLE);
+            initializePlayer();
         }
 
         return rootView;
@@ -87,20 +109,55 @@ public class StepDetailFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            initializePlayer();
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
-        releasePlayer();
+        if (simpleExoPlayer != null) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ((Util.SDK_INT <=23) || simpleExoPlayer == null) {
+            initializePlayer();
+        }
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        releasePlayer();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
     }
 
+
+
     // method to initialise player
-    private void initializePlayer(Uri mediaUri) {
+    private void initializePlayer() {
         if (simpleExoPlayer == null) {
+
+            // start videos from beginning
+            playerPosition = null;
+
             // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
@@ -110,10 +167,13 @@ public class StepDetailFragment extends Fragment {
 
             // Prepare the MediaSource.
             String userAgent = Util.getUserAgent(getContext(), "GABA");
+            Uri mediaUri = Uri.parse(videoUrl);
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                     getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
+
             simpleExoPlayer.prepare(mediaSource);
-            simpleExoPlayer.setPlayWhenReady(true);
+            simpleExoPlayer.setPlayWhenReady(getPlayerWhenReady);
+            simpleExoPlayer.seekTo(playerPosition);
 
             // fill screen if device is rotated
             if (getActivity().getResources().getConfiguration().orientation ==
@@ -127,16 +187,20 @@ public class StepDetailFragment extends Fragment {
             }
 
         }
+
+
     }
 
     // method to release player
     private void releasePlayer() {
 
         if (simpleExoPlayer != null) {
-            simpleExoPlayer.stop();
+            playerPosition = simpleExoPlayer.getCurrentPosition();
+            getPlayerWhenReady = simpleExoPlayer.getPlayWhenReady();
             simpleExoPlayer.release();
-            playerView = null;
+            simpleExoPlayer = null;
         }
     }
+
 
 }

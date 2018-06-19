@@ -30,8 +30,11 @@ public class Keys {
     public static final String RECIPE_IMAGE = "recipeImage";
     public static final String IMAGE = "image";
 
-    public static final String CLASS_NAME = "NetworkConnection";
     public static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
+
+
+    // ExoPlayer
+    public static final String PLAYER_POSITION = "playerPosition";
 
     // Widget
     public static final String ACTION_UPDATE_WIDGET = "com.bignerdranch.android.gaba.action.update.widget";
