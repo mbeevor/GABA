@@ -107,9 +107,9 @@ public class StepDetailFragment extends Fragment {
             Bundle recipeBundleForFragment = getArguments();
                 stepsList = recipeBundleForFragment.getParcelableArrayList(STEPS_LIST);
                 position = recipeBundleForFragment.getInt(POSITION);
-                playerPosition = simpleExoPlayer.getCurrentPosition();
-                currentWindow = simpleExoPlayer.getCurrentWindowIndex();
-                playWhenReady = simpleExoPlayer.getPlayWhenReady();
+                playerPosition = null;
+                currentWindow = 0;
+                playWhenReady = false;
 
         }
 
@@ -206,7 +206,11 @@ public class StepDetailFragment extends Fragment {
             simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
             playerView.setPlayer(simpleExoPlayer);
             simpleExoPlayer.setPlayWhenReady(true);
-            simpleExoPlayer.seekTo(currentWindow, playerPosition);
+            if (playerPosition != null) {
+                simpleExoPlayer.seekTo(currentWindow, playerPosition);
+            } else {
+                simpleExoPlayer.seekTo(0, 0);
+            }
             simpleExoPlayer.addListener(componentListener);
         }
 
