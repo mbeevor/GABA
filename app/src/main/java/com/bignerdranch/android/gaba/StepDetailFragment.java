@@ -4,28 +4,36 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bignerdranch.android.gaba.Model.Steps;
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -40,16 +48,20 @@ import static com.bignerdranch.android.gaba.Model.Keys.STEPS_LIST;
  * Created by Matthew on 10/06/2018.
  */
 
-public class StepDetailFragment extends Fragment {
+public class StepDetailFragment extends Fragment implements ExoPlayer.EventListener {
 
     public int position;
     private ArrayList<Steps> stepsList;
     @BindView(R.id.player_view)
     public SimpleExoPlayerView playerView;
+    private static MediaSessionCompat mediaSession;
+    @BindView(R.id.thumbnail_iv)
+    public ImageView thumbnailImage;
     private SimpleExoPlayer simpleExoPlayer;
     private Long playerPosition;
     private boolean getPlayerWhenReady;
     private String videoUrl;
+    private PlaybackStateCompat.Builder playbackStateBuilder;
 
     public StepDetailFragment() {
         // Required empty public constructor
@@ -95,12 +107,28 @@ public class StepDetailFragment extends Fragment {
         TextView textView = rootView.findViewById(R.id.step_tv);
         textView.setText(currentStep.getLongDescription());
 
+        String thumbnailUrl = currentStep.getThumbnailUrl();
+
+        // load thumbnail image, or hide if there isn't one
+        if (TextUtils.isEmpty(thumbnailUrl)) {
+            thumbnailImage.setVisibility(View.GONE);
+            playerView.setVisibility(View.VISIBLE);
+        } else {
+            thumbnailImage.setVisibility(View.VISIBLE);
+            Picasso.with(getContext())
+                    .load(thumbnailUrl)
+                    .into(thumbnailImage);
+        }
+
         videoUrl = currentStep.getVideoUrl();
+
         // load video into media player, or hide if there isn't one
         if (TextUtils.isEmpty(videoUrl)) {
             playerView.setVisibility(View.GONE);
         } else {
+            thumbnailImage.setVisibility(View.GONE);
             playerView.setVisibility(View.VISIBLE);
+            initializeMediaSession();
             initializePlayer();
         }
 
@@ -121,6 +149,7 @@ public class StepDetailFragment extends Fragment {
         super.onDestroyView();
         if (simpleExoPlayer != null) {
             releasePlayer();
+            mediaSession.setActive(false);
         }
     }
 
@@ -135,7 +164,7 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if ((Util.SDK_INT <=23) || simpleExoPlayer == null) {
+        if ((Util.SDK_INT <= 23) || simpleExoPlayer == null) {
             initializePlayer();
         }
 
@@ -150,13 +179,9 @@ public class StepDetailFragment extends Fragment {
     }
 
 
-
     // method to initialise player
     private void initializePlayer() {
         if (simpleExoPlayer == null) {
-
-            // start videos from beginning
-            playerPosition = null;
 
             // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
@@ -164,30 +189,45 @@ public class StepDetailFragment extends Fragment {
             simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
             playerView.setPlayer(simpleExoPlayer);
 
-
             // Prepare the MediaSource.
             String userAgent = Util.getUserAgent(getContext(), "GABA");
             Uri mediaUri = Uri.parse(videoUrl);
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                     getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
 
+//            simpleExoPlayer.seekTo(playerPosition);
             simpleExoPlayer.prepare(mediaSource);
-            simpleExoPlayer.setPlayWhenReady(getPlayerWhenReady);
-            simpleExoPlayer.seekTo(playerPosition);
-
-            // fill screen if device is rotated
-            if (getActivity().getResources().getConfiguration().orientation ==
-                    Configuration.ORIENTATION_LANDSCAPE) {
-                ViewGroup.LayoutParams params = playerView.getLayoutParams();
-                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                playerView.setLayoutParams(params);
-                ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-
-            }
+            simpleExoPlayer.setPlayWhenReady(true);
 
         }
 
+
+        // fill screen if device is rotated
+        if (getActivity().getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE) {
+            ViewGroup.LayoutParams params = playerView.getLayoutParams();
+            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            playerView.setLayoutParams(params);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+
+        }
+
+    }
+
+
+
+    private void initializeMediaSession() {
+
+        mediaSession = new MediaSessionCompat(getContext(), StepDetailFragment.class.getSimpleName());
+        mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        mediaSession.setMediaButtonReceiver(null);
+
+        playbackStateBuilder = new PlaybackStateCompat.Builder()
+                .setActions(PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_PAUSE);
+        mediaSession.setPlaybackState(playbackStateBuilder.build());
+        mediaSession.setCallback(new MediaSessionCallback());
+        mediaSession.setActive(true);
 
     }
 
@@ -196,11 +236,61 @@ public class StepDetailFragment extends Fragment {
 
         if (simpleExoPlayer != null) {
             playerPosition = simpleExoPlayer.getCurrentPosition();
-            getPlayerWhenReady = simpleExoPlayer.getPlayWhenReady();
+            simpleExoPlayer.stop();
             simpleExoPlayer.release();
             simpleExoPlayer = null;
         }
     }
 
 
+    @Override
+    public void onTimelineChanged(Timeline timeline, Object manifest) {
+
+    }
+
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+    }
+
+    @Override
+    public void onLoadingChanged(boolean isLoading) {
+
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
+            playbackStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, simpleExoPlayer.getCurrentPosition(), 1f);
+        } else if (playbackState == ExoPlayer.STATE_READY) {
+            playbackStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED, simpleExoPlayer.getCurrentPosition(), 1f);
+        }
+
+        mediaSession.setPlaybackState(playbackStateBuilder.build());
+
+    }
+
+    @Override
+    public void onPlayerError(ExoPlaybackException error) {
+
+    }
+
+    @Override
+    public void onPositionDiscontinuity() {
+
+    }
+
+private class MediaSessionCallback extends MediaSessionCompat.Callback {
+
+    @Override
+    public void onPlay() {
+        simpleExoPlayer.setPlayWhenReady(true);
+    }
+
+    @Override
+    public void onPause() {
+        simpleExoPlayer.setPlayWhenReady(false);
+    }
+
+}
 }

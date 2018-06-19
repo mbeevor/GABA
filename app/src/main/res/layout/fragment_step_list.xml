@@ -17,6 +17,17 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/thumbnail_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/margin"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toTopOf="@id/step_card_View"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <android.support.v7.widget.CardView
         android:id="@+id/step_card_View"
         android:layout_width="0dp"
