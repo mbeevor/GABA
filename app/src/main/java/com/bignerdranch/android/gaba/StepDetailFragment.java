@@ -84,6 +84,7 @@ public class StepDetailFragment extends Fragment {
             playerPosition = simpleExoPlayer.getCurrentPosition();
             currentWindow = simpleExoPlayer.getCurrentWindowIndex();
             playWhenReady = simpleExoPlayer.getPlayWhenReady();
+
         }
 
         savedInstanceState.putParcelableArrayList(STEPS_LIST, stepsList);
@@ -97,16 +98,16 @@ public class StepDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             stepsList = savedInstanceState.getParcelableArrayList(STEPS_LIST);
             position = savedInstanceState.getInt(POSITION);
             playerPosition = savedInstanceState.getLong(PLAYER_POSITION);
             currentWindow = savedInstanceState.getInt("current_window");
             playWhenReady = savedInstanceState.getBoolean("state");
-        }  else {
+        } else {
             Bundle recipeBundleForFragment = getArguments();
-                stepsList = recipeBundleForFragment.getParcelableArrayList(STEPS_LIST);
-                position = recipeBundleForFragment.getInt(POSITION);
+            stepsList = recipeBundleForFragment.getParcelableArrayList(STEPS_LIST);
+            position = recipeBundleForFragment.getInt(POSITION);
         }
 
         View rootView = inflater.inflate(R.layout.fragment_step_list, container, false);
@@ -210,19 +211,19 @@ public class StepDetailFragment extends Fragment {
             LoadControl loadControl = new DefaultLoadControl();
             simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
             playerView.setPlayer(simpleExoPlayer);
-            simpleExoPlayer.setPlayWhenReady(true);
-            if (playerPosition != null) {
-                simpleExoPlayer.seekTo(currentWindow, playerPosition);
-            } else {
-                simpleExoPlayer.seekTo(0, 0);
-            }
-            simpleExoPlayer.addListener(componentListener);
+
         }
 
-            // Prepare the MediaSource.
-            Uri mediaUri = Uri.parse(videoUrl);
-            MediaSource mediaSource = buildMediaSource(mediaUri);
-            simpleExoPlayer.prepare(mediaSource, true, false);
+        // Prepare the MediaSource.
+        Uri mediaUri = Uri.parse(videoUrl);
+        MediaSource mediaSource = buildMediaSource(mediaUri);
+        simpleExoPlayer.prepare(mediaSource, true, false);
+        simpleExoPlayer.setPlayWhenReady(playWhenReady);
+        if (playerPosition != null) {
+            simpleExoPlayer.seekTo(currentWindow, playerPosition);
+        } else {
+            simpleExoPlayer.seekTo(0, 0);
+        }
 
 
         // fill screen if device is rotated
